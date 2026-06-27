@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DARUSSYIFA MEDIKA - Ultimate Workspace v5.0 (Update UI 3.2)</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.21/mammoth.browser.min.js"></script>
+
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({pageLanguage: 'id', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Orbitron:wght@500;700;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; transition: background-color 0.3s, color 0.3s; }
+        .font-tech { font-family: 'Orbitron', sans-serif; }
+        .mono-font { font-family: 'JetBrains Mono', monospace; }
+        
+        /* Tema Warna */
+        .theme-dark {
+            --bg-main: #020617; --bg-card: #0f172a; --bg-header: rgba(15, 23, 42, 0.95);
+            --border-color: #334155; --text-main: #f8fafc; --text-muted: #94a3b8;
+            --bg-input: #020617; --accent-amber: #f59e0b; --medical-cyan: #06b6d4;
+        }
+        
+        .theme-light {
+            --bg-main: #f1f5f9; --bg-card: #ffffff; --bg-header: rgba(255, 255, 255, 0.95);
+            --border-color: #cbd5e1; --text-main: #0f172a; --text-muted: #334155;
+            --bg-input: #f8fafc; --accent-amber: #d97706; --medical-cyan: #0891b2;
+        }
+
+        /* Tooltip Holografik Informatif */
+        .holo-tooltip {
+            position: fixed; background: rgba(15, 23, 42, 0.98); border: 2px solid var(--medical-cyan);
+            box-shadow: 0 0 25px rgba(6, 182, 212, 0.4), inset 0 0 10px rgba(6, 182, 212, 0.2);
+            color: #ffffff; padding: 14px; border-radius: 12px; font-size: 13px;
+            font-family: 'JetBrains Mono', monospace; z-index: 9999; display: none;
+            pointer-events: none; max-width: 320px; backdrop-filter: blur(12px); line-height: 1.5; text-align: justify;
+        }
+
+        .drag-handle { cursor: move; user-select: none; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .hidden-ui { display: none !important; }
+
+        /* Animasi Orbit Atom */
+        .orbit-ring { position: absolute; border-radius: 50%; border: 3px dashed; opacity: 0.8; }
+        .orbit-ring-1 { width: 170px; height: 170px; border-color: #06b6d4 transparent #06b6d4 transparent; animation: spin1 5s linear infinite; }
+        .orbit-ring-2 { width: 190px; height: 190px; border-color: transparent #f59e0b transparent #f59e0b; animation: spin2 7s linear infinite; }
+        .orbit-ring-3 { width: 210px; height: 210px; border-color: #ec4899 transparent #ec4899 transparent; animation: spin3 9s linear infinite; }
+        
+        @keyframes spin1 { 0% { transform: rotateX(70deg) rotateY(20deg) rotateZ(0deg); } 100% { transform: rotateX(70deg) rotateY(20deg) rotateZ(360deg); } }
+        @keyframes spin2 { 0% { transform: rotateX(70deg) rotateY(-40deg) rotateZ(0deg); } 100% { transform: rotateX(70deg) rotateY(-40deg) rotateZ(-360deg); } }
+        @keyframes spin3 { 0% { transform: rotateX(20deg) rotateY(70deg) rotateZ(0deg); } 100% { transform: rotateX(20deg) rotateY(70deg) rotateZ(360deg); } }
+
+        /* Animasi Latar Belakang Khas Siber */
+        @keyframes technology-scanline { 0% { transform: translateY(-100%); } 100% { transform: translateY(100%); } }
+        @keyframes drift-slow-motion { 0%, 100% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-10px) rotate(0.3deg); } }
+        .screensaver-grid { background-image: linear-gradient(rgba(6, 182, 212, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(6, 182, 212, 0.05) 1px, transparent 1px); background-size: 50px 50px; }
+        .sc-scanline-animation { animation: technology-scanline 7s linear infinite; }
+        .sc-drift-animation { animation: drift-slow-motion 5.5s ease-in-out infinite; }
+        
+        /* Shimmer Effect untuk Link Creator */
+        @keyframes shimmer { 100% { transform: translateX(100%); } }
+
+        /* Kustomisasi Google Translate Wrap */
+        .translate-wrapper select.goog-te-combo {
+            width: 100% !important;
+            height: 100% !important;
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+            z-index: 50;
+        }
+        .goog-te-gadget .goog-logo-link { display: none !important; }
+        .goog-te-gadget { color: transparent !important; font-size:0px !important; margin: 0 !important; padding: 0 !important; }
+        body { top: 0px !important; position: static !important; }
+        .skiptranslate iframe { display: none !important; }
+        ::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
+    </style>
+</head>
+<body id="appBody" class="theme-dark bg-[var(--bg-main)] text-[var(--text-main)] p-2 md:p-4 lg:p-6 min-h-screen flex flex-col justify-between overflow-x-hidden relative pb-24">
+
+    <div id="holoTooltipBox" class="holo-tooltip shadow-2xl hidden md:block"></div>
+
+    <div id="startupLoader" class="fixed inset-0 z-[9999] bg-[#020714] flex flex-col items-center justify-center overflow-hidden font-tech transition-all duration-700">
+        <div class="absolute inset-0 screensaver-grid opacity-50 pointer-events-none"></div>
+        <div class="absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-30 sc-scanline-animation pointer-events-none"></div>
+        <div class="z-10 text-center sc-drift-animation flex flex-col items-center px-6">
+            <div class="mb-6 drop-shadow-[0_0_25px_rgba(6,182,212,0.8)] relative flex items-center justify-center">
+                <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
+                    <div class="orbit-ring orbit-ring-1"></div>
+                    <div class="orbit-ring orbit-ring-2"></div>
+                    <div class="orbit-ring orbit-ring-3"></div>
+                </div>
+                <svg class="relative z-10" width="130" height="130" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <style>
+                        @keyframes blinkL { 0%, 85%, 100% { transform: scaleY(1); } 90% { transform: scaleY(0.05); } }
+                        @keyframes blinkR { 0%, 35%, 100% { transform: scaleY(1); } 40% { transform: scaleY(0.05); } }
+                        @keyframes earL { 0%, 80%, 100% { transform: rotate(0deg); } 90% { transform: rotate(-18deg); } }
+                        @keyframes earR { 0%, 30%, 100% { transform: rotate(0deg); } 40% { transform: rotate(18deg); } }
+                        @keyframes tongueOut { 0%, 20%, 80%, 100% { transform: scaleY(0); } 40%, 60% { transform: scaleY(1.3); } }
+                        .eye-left { transform-origin: 35px 50px; animation: blinkL 3.5s infinite; }
+                        .eye-right { transform-origin: 65px 50px; animation: blinkR 3.5s infinite; }
+                        .ear-left { transform-origin: 25px 35px; animation: earL 4s infinite ease-in-out; }
+                        .ear-right { transform-origin: 75px 35px; animation: earR 4.5s infinite ease-in-out; }
+                        .cat-tongue { transform-origin: 50px 66px; animation: tongueOut 5s infinite ease-in-out; }
+                    </style>
+                    <g class="ear-left"><polygon points="25,45 10,10 45,30" fill="#f8fafc" stroke="#06b6d4" stroke-width="2"/><polygon points="25,38 16,18 38,30" fill="#f472b6"/></g>
+                    <g class="ear-right"><polygon points="75,45 90,10 55,30" fill="#f8fafc" stroke="#06b6d4" stroke-width="2"/><polygon points="75,38 84,18 62,30" fill="#f472b6"/></g>
+                    <circle cx="50" cy="55" r="38" fill="#f8fafc" stroke="#06b6d4" stroke-width="2.5"/>
+                    <path d="M 14 42 Q 50 25 86 42" fill="none" stroke="#334155" stroke-width="6" stroke-linecap="round"/>
+                    <circle cx="50" cy="33" r="12" fill="#cbd5e1" stroke="#06b6d4" stroke-width="2"/><circle cx="50" cy="33" r="4" fill="#020617"/><circle cx="44" cy="27" r="2" fill="#ffffff"/> 
+                    <g class="eye-left"><ellipse cx="35" cy="50" rx="5" ry="7" fill="#020617"/><circle cx="33" cy="48" r="2" fill="#ffffff"/><path d="M 28 45 Q 35 40 42 45" fill="none" stroke="#020617" stroke-width="1.5" stroke-linecap="round"/></g>
+                    <g class="eye-right"><ellipse cx="65" cy="50" rx="5" ry="7" fill="#020617"/><circle cx="63" cy="48" r="2" fill="#ffffff"/><path d="M 58 45 Q 65 40 72 45" fill="none" stroke="#020617" stroke-width="1.5" stroke-linecap="round"/></g>
+                    <ellipse cx="25" cy="62" rx="7" ry="4" fill="#f472b6" opacity="0.7"/><ellipse cx="75" cy="62" rx="7" ry="4" fill="#f472b6" opacity="0.7"/>
+                    <polygon points="47,60 53,60 50,64" fill="#f472b6"/>
+                    <path d="M 38 65 Q 44 72 50 66 Q 56 72 62 65" fill="none" stroke="#020617" stroke-width="2" stroke-linecap="round"/>
+                    <path class="cat-tongue" d="M 45 67 Q 50 85 55 67 Z" fill="#f43f5e" stroke="#9f1239" stroke-width="1"/>
+                    <rect x="18" y="59" width="6" height="2" fill="#ffffff" opacity="0.9"/><rect x="20" y="57" width="2" height="6" fill="#ffffff" opacity="0.9"/>
+                </svg>
+            </div>
+            <div class="text-lg md:text-2xl font-black text-cyan-400 mt-2 animate-pulse tracking-widest border-2 border-cyan-500/40 px-6 md:px-8 py-2.5 md:py-3 rounded-full bg-slate-950/80 shadow-[0_0_20px_rgba(6,182,212,0.3)] uppercase z-10 relative">
+                BOOTING SYSTEM v5.0...
+            </div>
+        </div>
+    </div>
+
+    <div id="monsoonTechScreensaver" class="hidden fixed inset-0 z-[9999] bg-[#020714] flex flex-col items-center justify-center overflow-hidden font-tech transition-all duration-700 opacity-0 select-none">
+        <div class="absolute inset-0 screensaver-grid opacity-50 pointer-events-none"></div>
+        <div class="absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-30 sc-scanline-animation pointer-events-none"></div>
+        <div class="z-10 text-center sc-drift-animation flex flex-col items-center px-4 md:px-6">
+            <div class="mb-6 drop-shadow-[0_0_35px_rgba(6,182,212,0.9)] relative flex items-center justify-center">
+                <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
+                    <div class="orbit-ring orbit-ring-1" style="width: 220px; height: 220px;"></div>
+                    <div class="orbit-ring orbit-ring-2" style="width: 250px; height: 250px;"></div>
+                    <div class="orbit-ring orbit-ring-3" style="width: 280px; height: 280px;"></div>
+                </div>
+                <svg class="relative z-10" width="180" height="180" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <g class="ear-left"><polygon points="25,45 10,10 45,30" fill="#0f172a" stroke="#06b6d4" stroke-width="2"/><polygon points="25,38 16,18 38,30" fill="#f472b6"/></g>
+                    <g class="ear-right"><polygon points="75,45 90,10 55,30" fill="#0f172a" stroke="#06b6d4" stroke-width="2"/><polygon points="75,38 84,18 62,30" fill="#f472b6"/></g>
+                    <circle cx="50" cy="55" r="38" fill="#0f172a" stroke="#06b6d4" stroke-width="2.5"/>
+                    <path d="M 14 42 Q 50 25 86 42" fill="none" stroke="#06b6d4" stroke-width="6" stroke-linecap="round"/>
+                    <circle cx="50" cy="33" r="12" fill="#1e293b" stroke="#06b6d4" stroke-width="2"/><circle cx="50" cy="33" r="4" fill="#06b6d4"/><circle cx="44" cy="27" r="2" fill="#ffffff"/> 
+                    <g class="eye-left"><ellipse cx="35" cy="50" rx="5" ry="7" fill="#06b6d4"/><circle cx="33" cy="48" r="2" fill="#ffffff"/><path d="M 28 45 Q 35 40 42 45" fill="none" stroke="#06b6d4" stroke-width="1.5" stroke-linecap="round"/></g>
+                    <g class="eye-right"><ellipse cx="65" cy="50" rx="5" ry="7" fill="#06b6d4"/><circle cx="63" cy="48" r="2" fill="#ffffff"/><path d="M 58 45 Q 65 40 72 45" fill="none" stroke="#06b6d4" stroke-width="1.5" stroke-linecap="round"/></g>
+                    <ellipse cx="25" cy="62" rx="7" ry="4" fill="#f472b6" opacity="0.7"/><ellipse cx="75" cy="62" rx="7" ry="4" fill="#f472b6" opacity="0.7"/>
+                    <polygon points="47,60 53,60 50,64" fill="#f472b6"/>
+                    <path d="M 38 65 Q 44 72 50 66 Q 56 72 62 65" fill="none" stroke="#06b6d4" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <div class="mb-5 flex items-center gap-2 border-2 border-cyan-500/40 px-4 md:px-6 py-2 rounded-full bg-slate-950/80 text-cyan-400 font-mono text-xs md:text-sm tracking-[0.25em] uppercase shadow-lg z-10 relative">
+                <i class="fa-solid fa-shield-halved animate-pulse"></i> System Protection Active
+            </div>
+            <div id="scClockDisplay" class="text-5xl sm:text-7xl md:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-cyan-200 to-cyan-500 tracking-wider filter drop-shadow-[0_0_30px_rgba(6,182,212,0.6)] z-10 relative">00:00:00</div>
+            <div class="mt-4 flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4 text-slate-200 font-medium tracking-widest text-sm md:text-xl border-t-2 border-b-2 border-cyan-500/40 py-2 md:py-3 px-4 md:px-8 bg-slate-900/60 backdrop-blur-sm w-full md:w-auto z-10 relative">
+                <span id="scDateDisplay" class="text-center">Memuat...</span>
+                <div class="hidden md:block w-[2px] h-4 md:h-6 bg-cyan-500/40"></div>
+                <span id="scTimezoneDisplay" class="text-xs md:text-sm font-mono font-black text-cyan-400 bg-slate-950 px-2 py-1 rounded border border-cyan-500/30">TZ</span>
+            </div>
+            <div class="mt-12 text-slate-500 font-mono text-[10px] md:text-xs tracking-[0.3em] uppercase animate-pulse text-center z-10 relative">
+                <i class="fa-solid fa-computer-mouse"></i> Gerakkan Kursor / Sentuh Untuk Kembali
+            </div>
+        </div>
+    </div>
+
+    <div id="mainDashboardInterface" class="w-full flex flex-col justify-between flex-1 gap-4 md:gap-5">
+        
+        <header class="w-full bg-[var(--bg-header)] backdrop-blur-md p-3 md:p-4 rounded-2xl border-2 border-[var(--border-color)] grid grid-cols-1 md:grid-cols-3 gap-4 items-center shadow-md z-40 relative">
+            
+            <div class="flex items-center gap-3 justify-start">
+                <div class="p-2.5 md:p-3.5 bg-slate-950 rounded-xl border-2 border-cyan-800 shrink-0 shadow-inner custom-holo-trigger" data-holo="Grup Kendali Utama Workspace Medis v5.0: Menyediakan akses manajemen CRUD pasien, apotek, pakar, dan diagnosis analitik.">
+                    <i class="fa-solid fa-laptop-medical text-cyan-400 text-2xl md:text-4xl animate-pulse"></i>
+                </div>
+                <div class="min-w-0">
+                    <h1 class="font-tech text-base lg:text-xl xl:text-3xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-[var(--text-main)] via-cyan-400 to-blue-600 leading-tight uppercase flex items-center gap-2 flex-wrap">
+                        <span>DARUSSYIFA</span>
+                        <span class="text-[9px] md:text-xs lg:text-sm font-bold bg-amber-500/20 text-amber-400 px-1.5 py-0.5 md:px-2 md:py-0.5 rounded-md border border-amber-500/50 flex-shrink-0 tracking-normal shadow-sm mt-1 sm:mt-0">Ver. 5.0</span>
+                    </h1>
+                    <p class="text-[9px] md:text-xs font-mono text-[var(--text-muted)] mt-0.5 md:mt-1 uppercase tracking-wider flex items-center gap-1.5 font-bold">
+                        <span class="inline-block w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-cyan-500 animate-ping"></span> 
+                        <span class="truncate">Klinik & Apotek Terpadu</span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex justify-center w-full order-last md:order-none col-span-1 md:col-span-1">
+                <div class="w-full md:w-auto bg-slate-950/90 border-2 border-[var(--border-color)] py-2 px-6 rounded-xl shadow-sm font-tech text-center flex flex-col justify-center items-center custom-holo-trigger" data-holo="Waktu Sinkronisasi Lokal: Digunakan untuk memberikan penanda waktu yang valid pada riwayat diagnosis dan resep obat secara real-time.">
+                    <div id="lbl-real-day" class="text-[9px] md:text-[10px] lg:text-xs font-black text-slate-400 tracking-wider uppercase">Memuat...</div>
+                    <div class="text-base md:text-lg lg:text-xl font-black text-cyan-400 mt-1 flex items-center justify-center gap-1.5 font-mono drop-shadow-md">
+                        <i class="fa-solid fa-clock text-xs md:text-sm text-cyan-500"></i>
+                        <span id="lbl-real-clock">00:00:00</span> <span id="lbl-timezone" class="text-[9px] md:text-[10px] lg:text-xs text-slate-500 font-bold">TZ</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2 justify-center md:justify-end h-10 md:h-11">
+                <div class="translate-wrapper relative overflow-hidden bg-slate-950 border-2 border-[var(--border-color)] text-cyan-400 rounded-xl h-full flex items-center justify-center px-3 hover:border-cyan-400 transition-colors shadow-md flex-1 md:flex-none custom-holo-trigger" data-holo="Alih Bahasa: Mengubah bahasa antarmuka secara instan menggunakan modul Google Translate.">
+                    <i class="fa-solid fa-globe text-cyan-400 mr-1.5 pointer-events-none"></i>
+                    <span class="text-[10px] md:text-[11px] font-mono font-black pointer-events-none">TRANSLATE</span>
+                    <div id="google_translate_element" class="absolute inset-0 opacity-0 z-20"></div>
+                </div>
+                
+                <button type="button" onclick="toggleThemeMode()" class="bg-slate-950 border-2 border-[var(--border-color)] text-[10px] md:text-[11px] font-mono font-black px-2 md:px-3 rounded-xl text-amber-400 hover:border-amber-400 flex items-center justify-center gap-1.5 shadow-md flex-1 md:flex-none h-full custom-holo-trigger transition-colors" data-holo="Beralih Mode Antarmuka: Mengubah palet warna tema ruang kerja.">
+                    <i id="themeIcon" class="fa-solid fa-moon text-sm"></i> <span id="themeText" class="hidden sm:inline">DARK</span>
+                </button>
+                
+                <button type="button" onclick="openCreatorModal()" class="bg-slate-800 hover:bg-slate-700 text-white text-[10px] md:text-[11px] font-mono font-black px-2 md:px-3 rounded-xl border-2 border-[var(--border-color)] transition-colors flex items-center justify-center gap-1.5 flex-1 md:flex-none shadow-md h-full custom-holo-trigger" data-holo="Identitas Pengembang: Menampilkan profil Mohamad Hartadi, tautan blog, dan kontak WhatsApp.">
+                    <i class="fa-solid fa-user-gear text-cyan-400 text-sm"></i> <span class="hidden sm:inline">CREATOR</span>
+                </button>
+            </div>
+        </header>
+
+        <div class="w-full flex flex-col lg:flex-row gap-4 md:gap-6 items-start relative mt-1 md:mt-2 flex-1">
+            
+            <aside class="w-full lg:w-72 shrink-0 lg:sticky lg:top-6 z-30">
+                <div class="bg-[var(--bg-card)] p-3 md:p-4 rounded-2xl border-2 border-[var(--border-color)] space-y-3 md:space-y-4 shadow-xl">
+                    <h2 class="text-[10px] md:text-xs font-black text-cyan-500 font-mono uppercase tracking-wider mb-2 md:mb-3 px-1"><i class="fa-solid fa-server mr-1"></i> Navigasi Sistem</h2>
+                    <nav class="flex flex-row overflow-x-auto lg:flex-col gap-2 lg:gap-0 lg:space-y-2 text-xs font-mono font-bold pb-2 lg:pb-0 hide-scrollbar" id="categoryNav">
+                        <button onclick="switchTab('dashboard', this)" class="nav-btn whitespace-nowrap flex-shrink-0 lg:w-full text-left px-4 py-2.5 md:py-3 rounded-xl bg-cyan-600 text-white flex items-center transition-colors shadow-md custom-holo-trigger" data-holo="Dashboard analitik metrik dan pusat kendali Master Database.">
+                            <i class="fa-solid fa-chart-line w-6 text-center"></i> Dasbor Utama
+                        </button>
+                        <button onclick="switchTab('pasien', this)" class="nav-btn whitespace-nowrap flex-shrink-0 lg:w-full text-left px-4 py-2.5 md:py-3 rounded-xl text-[var(--text-main)] hover:bg-cyan-500/10 flex items-center transition-colors border border-transparent custom-holo-trigger" data-holo="Manajemen (CRUD) data dan rekam medis pasien terdaftar.">
+                            <i class="fa-solid fa-users w-6 text-center text-amber-500"></i> Kelola Pasien
+                        </button>
+                        <button onclick="switchTab('apotek', this)" class="nav-btn whitespace-nowrap flex-shrink-0 lg:w-full text-left px-4 py-2.5 md:py-3 rounded-xl text-[var(--text-main)] hover:bg-cyan-500/10 flex items-center transition-colors border border-transparent custom-holo-trigger" data-holo="Inventory Gudang Farmasi: Kelola stok obat dan impor batch via Excel/CSV.">
+                            <i class="fa-solid fa-pills w-6 text-center text-purple-400"></i> Inventory Apotek
+                        </button>
+                        <button onclick="switchTab('pakar', this)" class="nav-btn whitespace-nowrap flex-shrink-0 lg:w-full text-left px-4 py-2.5 md:py-3 rounded-xl text-[var(--text-main)] hover:bg-cyan-500/10 flex items-center transition-colors border border-transparent custom-holo-trigger" data-holo="Matriks Sistem Pakar: Basis pengetahuan diagnosis dan rekomendasi algoritmis.">
+                            <i class="fa-solid fa-brain w-6 text-center text-pink-500"></i> Menu Pakar
+                        </button>
+                        <button onclick="switchTab('diagnosis', this)" class="nav-btn whitespace-nowrap flex-shrink-0 lg:w-full text-left px-4 py-2.5 md:py-3 rounded-xl text-[var(--text-main)] hover:bg-cyan-500/10 flex items-center transition-colors border border-transparent custom-holo-trigger" data-holo="Modul Eksekusi: Proses resep, potong stok otomatis, dan cetak PDF/Word/WA.">
+                            <i class="fa-solid fa-file-medical w-6 text-center text-emerald-500"></i> Diagnosis & Cetak
+                        </button>
+                    </nav>
+                </div>
+            </aside>
+
+            <section class="flex-1 w-full bg-[var(--bg-card)] rounded-2xl border-2 border-[var(--border-color)] shadow-xl p-3 md:p-5 lg:p-6 overflow-hidden min-h-[450px] lg:min-h-[500px] flex flex-col relative">
+                
+                <div id="tab-dashboard" class="tab-content flex-1 animate-fade-in overflow-y-auto pr-1 md:pr-2 hide-scrollbar">
+                    <div class="flex items-center gap-2 mb-4 md:mb-6 border-b border-slate-700 pb-2 md:pb-3">
+                        <i class="fa-solid fa-satellite-dish text-cyan-400 text-xl md:text-2xl animate-pulse"></i>
+                        <h2 class="text-base sm:text-lg md:text-2xl font-tech font-black text-[var(--text-main)] uppercase tracking-widest truncate">METRIK SISTEM v5.0</h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 mb-6">
+                        <div onclick="switchTab('pasien', document.querySelectorAll('.nav-btn')[1])" class="cursor-pointer hover:scale-[1.02] hover:ring-2 hover:ring-cyan-500 transition-all border-2 border-cyan-500/40 p-4 md:p-6 rounded-xl bg-gradient-to-br from-slate-900 to-slate-950 text-center relative overflow-hidden shadow-inner custom-holo-trigger" data-holo="Klik untuk membuka menu Manajemen Pasien.">
+                            <i class="fa-solid fa-user-injured text-5xl md:text-6xl mb-2 opacity-20 absolute -right-3 -bottom-3 text-cyan-400"></i>
+                            <h3 class="text-xs md:text-sm font-mono font-bold text-slate-400 uppercase tracking-widest">Total Pasien</h3>
+                            <p id="stat-pasien" class="text-4xl md:text-5xl font-tech font-black text-cyan-400 mt-2 filter drop-shadow-[0_0_10px_rgba(6,182,212,0.8)]">0</p>
+                        </div>
+                        <div onclick="switchTab('apotek', document.querySelectorAll('.nav-btn')[2])" class="cursor-pointer hover:scale-[1.02] hover:ring-2 hover:ring-purple-500 transition-all border-2 border-purple-500/40 p-4 md:p-6 rounded-xl bg-slate-950 text-center relative overflow-hidden shadow-inner custom-holo-trigger" data-holo="Klik untuk membuka menu Inventory Apotek.">
+                            <i class="fa-solid fa-pills text-5xl md:text-6xl mb-2 opacity-20 absolute -right-3 -bottom-3 text-purple-400"></i>
+                            <h3 class="text-xs md:text-sm font-mono font-bold text-slate-400 uppercase tracking-widest">Total Obat</h3>
+                            <p id="stat-obat" class="text-4xl md:text-5xl font-tech font-black text-purple-400 mt-2 filter drop-shadow-[0_0_10px_rgba(168,85,247,0.8)]">0</p>
+                        </div>
+                        <div onclick="switchTab('pakar', document.querySelectorAll('.nav-btn')[3])" class="cursor-pointer hover:scale-[1.02] hover:ring-2 hover:ring-pink-500 transition-all border-2 border-pink-500/40 p-4 md:p-6 rounded-xl bg-slate-950 text-center relative overflow-hidden shadow-inner custom-holo-trigger" data-holo="Klik untuk membuka Matriks Sistem Pakar.">
+                            <i class="fa-solid fa-brain text-5xl md:text-6xl mb-2 opacity-20 absolute -right-3 -bottom-3 text-pink-400"></i>
+                            <h3 class="text-xs md:text-sm font-mono font-bold text-slate-400 uppercase tracking-widest">Basis Pakar</h3>
+                            <p id="stat-pakar" class="text-4xl md:text-5xl font-tech font-black text-pink-400 mt-2 filter drop-shadow-[0_0_10px_rgba(236,72,153,0.8)]">0</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 mb-4 md:mb-6">
+                        <div class="bg-slate-900/80 p-4 md:p-5 rounded-xl border border-emerald-500/50 shadow-[0_0_15px_rgba(16,185,129,0.1)] custom-holo-trigger" data-holo="Informasi fitur terbaru dan panduan sinkronisasi aplikasi.">
+                            <h3 class="text-base md:text-lg font-tech font-black text-emerald-400 mb-2 border-b border-slate-700 pb-2"><i class="fa-solid fa-circle-info mr-2"></i> UPDATE & HELP SYSTEM V5.0</h3>
+                            <div class="space-y-3 text-[11px] md:text-sm font-mono text-slate-300 mt-3 text-justify leading-relaxed">
+                                <p><b class="text-amber-400">Fitur Impor Data:</b> Gunakan tombol Impor Dokumen (Word/Excel/CSV) untuk melakukan entri massal pada Basis Pakar & Apotek secara efisien.</p>
+                                <p><b class="text-cyan-400">Ekosistem CRUD Dinamis:</b> Anda memiliki hak penuh untuk <i>Create, Read, Update, Delete,</i> maupun <i>Reset Semua Data</i> pada setiap modul.</p>
+                                <p><b class="text-pink-400">Sinkronisasi Penuh:</b> Pembaharuan Basis Pakar akan otomatis muncul pada rekomendasi Resep. Mencetak resep otomatis memotong stok Apotek.</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-900/80 p-4 md:p-5 rounded-xl border border-blue-500/50 shadow-[0_0_15px_rgba(59,130,246,0.15)] custom-holo-trigger" data-holo="Pusat Kendali Basis Data Master. Simpan cadangan atau pindahkan data ke perangkat/laptop lain.">
+                            <h3 class="text-base md:text-lg font-tech font-black text-blue-400 mb-2 border-b border-slate-700 pb-2"><i class="fa-solid fa-database mr-2"></i> MASTER DATABASE HUB</h3>
+                            <div class="space-y-3 text-[11px] md:text-sm font-mono text-slate-300 mt-3 flex flex-col justify-between h-[calc(100%-2rem)]">
+                                <p class="text-justify leading-relaxed">Cadangkan seluruh data terpadu (Pasien, Apotek, dan Sistem Pakar) ke dalam satu file lokal (JSON), atau pulihkan data tersebut dari perangkat komputer/laptop lain ke sistem mesin ini.</p>
+                                <div class="flex flex-col sm:flex-row gap-3 mt-4 pt-2 border-t border-slate-800">
+                                    <button onclick="exportMasterDB()" class="flex-1 bg-slate-950 hover:bg-blue-900/50 border border-blue-500/50 hover:border-blue-400 text-blue-400 font-bold py-2 md:py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2 shadow-md">
+                                        <i class="fa-solid fa-cloud-arrow-down"></i> EKSPOR (BACKUP)
+                                    </button>
+                                    <label class="flex-1 bg-slate-950 hover:bg-emerald-900/50 border border-emerald-500/50 hover:border-emerald-400 text-emerald-400 font-bold py-2 md:py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2 shadow-md cursor-pointer">
+                                        <i class="fa-solid fa-cloud-arrow-up"></i> IMPOR (RESTORE)
+                                        <input type="file" id="importMasterFile" class="hidden" accept=".json" onchange="importMasterDB(event)">
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/90 p-4 md:p-5 rounded-xl border-2 border-cyan-500 shadow-[0_0_20px_rgba(6,182,212,0.4),inset_0_0_15px_rgba(6,182,212,0.2)] custom-holo-trigger" data-holo="Informasi Pengembang Sistem">
+                        <h3 class="text-base md:text-lg font-tech font-black text-cyan-400 mb-3 border-b border-cyan-500/50 pb-2"><i class="fa-solid fa-code mr-2"></i> PROFIL PROGRAMMER & DUKUNGAN SISTEM</h3>
+                        <div class="flex flex-col md:flex-row items-center gap-4 justify-between">
+                            <div class="flex items-center gap-3 w-full md:w-auto">
+                                <div class="w-12 h-12 shrink-0 bg-slate-950 rounded-full border-2 border-cyan-400 flex items-center justify-center text-cyan-400 text-xl shadow-[0_0_10px_rgba(6,182,212,0.5)]">
+                                    <i class="fa-solid fa-user-gear"></i>
+                                </div>
+                                <div class="min-w-0">
+                                    <h4 class="font-tech font-black text-cyan-300 text-sm md:text-base truncate">MOHAMAD HARTADI (ADI)</h4>
+                                    <p class="font-mono text-[10px] md:text-xs text-slate-400">Software Engineer & UI/UX Architect</p>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-2 w-full md:w-auto">
+                                <a href="https://www.facebook.com/m.hartadi" target="_blank" class="flex-1 md:flex-none justify-center bg-blue-900/30 hover:bg-blue-600/50 border border-blue-500/50 text-blue-400 px-3 py-2 rounded-lg flex items-center gap-2 text-[10px] md:text-xs font-bold transition-all shadow-[0_0_10px_rgba(59,130,246,0.3)]"><i class="fa-brands fa-facebook text-sm"></i> Facebook</a>
+                                <a href="https://newbieonline7.blogspot.com/" target="_blank" class="flex-1 md:flex-none justify-center bg-amber-900/30 hover:bg-amber-600/50 border border-amber-500/50 text-amber-400 px-3 py-2 rounded-lg flex items-center gap-2 text-[10px] md:text-xs font-bold transition-all shadow-[0_0_10px_rgba(245,158,11,0.3)]"><i class="fa-solid fa-globe text-sm"></i> Blogosphere</a>
+                                <a href="https://wa.me/6282231036047?text=Halo%20Adi,%20saya%20tertarik%20dengan%20DARUSSYIFA%20MEDIKA" target="_blank" class="flex-1 md:flex-none justify-center bg-emerald-900/30 hover:bg-emerald-600/50 border border-emerald-500/50 text-emerald-400 px-3 py-2 rounded-lg flex items-center gap-2 text-[10px] md:text-xs font-bold transition-all shadow-[0_0_10px_rgba(16,185,129,0.3)]"><i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="tab-pasien" class="tab-content hidden-ui flex flex-col h-full">
+                    <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center border-b border-amber-500/50 pb-2 md:pb-3 mb-3 md:mb-4 gap-3">
+                        <h2 class="text-base md:text-xl font-tech font-black uppercase text-amber-500 shrink-0"><i class="fa-solid fa-users mr-2"></i> Manajemen Pasien</h2>
+                        <div class="flex flex-col sm:flex-row items-center gap-2 w-full lg:w-auto">
+                            <div class="relative w-full sm:w-48 md:w-56">
+                                <i class="fa-solid fa-search absolute left-3 top-2.5 text-slate-400 text-sm"></i>
+                                <input type="text" id="search-pasien" onkeyup="searchPatient()" placeholder="Filter Pasien..." class="w-full bg-slate-950 border border-slate-600 rounded-lg pl-9 pr-3 py-1.5 text-xs md:text-sm font-mono text-white focus:border-amber-400 outline-none">
+                            </div>
+                            <button onclick="resetPasien()" class="w-full sm:w-auto bg-red-950 hover:bg-red-800 border border-red-500/50 text-red-400 hover:text-white px-3 py-1.5 rounded-lg text-[11px] md:text-xs font-mono font-bold transition-all flex items-center justify-center gap-2 shadow-[0_0_10px_rgba(239,68,68,0.2)] custom-holo-trigger" data-holo="AWAS: Mengosongkan seluruh data pasien. Pastikan Anda memiliki backup, karena data yang terhapus tidak bisa dipanggil kembali!"><i class="fa-solid fa-trash-can"></i> Hapus Semua Data</button>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-slate-900 p-3 md:p-4 rounded-xl border border-slate-700 mb-4 grid grid-cols-1 md:grid-cols-6 gap-2 md:gap-3 font-mono text-[11px] md:text-xs shadow-inner">
+                        <input type="hidden" id="edit-id-tracker">
+                        <div class="flex flex-col md:col-span-1"><label class="text-slate-400 font-bold mb-1">ID Reg *</label><input type="text" id="p-id" placeholder="ID Otomatis..." class="w-full p-2 bg-slate-950 border border-slate-600 rounded-lg text-white focus:border-amber-400 outline-none"></div>
+                        <div class="flex flex-col md:col-span-2"><label class="text-slate-400 font-bold mb-1">Nama Pasien *</label><input type="text" id="p-nama" placeholder="Nama Lengkap..." class="w-full p-2 bg-slate-950 border border-slate-600 rounded-lg text-white focus:border-amber-400 outline-none"></div>
+                        <div class="flex flex-col md:col-span-1"><label class="text-slate-400 font-bold mb-1">Usia (Thn) *</label><input type="number" id="p-usia" placeholder="Angka..." class="w-full p-2 bg-slate-950 border border-slate-600 rounded-lg text-white focus:border-amber-400 outline-none"></div>
+                        <div class="flex flex-col md:col-span-2"><label class="text-slate-400 font-bold mb-1">Gender *</label><select id="p-gender" class="w-full p-2 bg-slate-950 border border-slate-600 rounded-lg text-white focus:border-amber-400 outline-none"><option value="L">Laki-laki</option><option value="P">Perempuan</option></select></div>
+                        <div class="flex flex-col md:col-span-2"><label class="text-slate-400 font-bold mb-1">No. WhatsApp *</label><input type="text" id="p-wa" placeholder="08xxxx" class="w-full p-2 bg-slate-950 border border-slate-600 rounded-lg text-white focus:border-amber-400 outline-none"></div>
+                        <div class="flex flex-col md:col-span-4"><label class="text-slate-400 font-bold mb-1">Hari & Tanggal Berobat *</label><input type="datetime-local" id="p-tanggal" class="w-full p-2 bg-slate-950 border border-slate-600 rounded-lg text-white focus:border-amber-400 outline-none"></div>
+                        <div class="flex flex-col md:col-span-3"><label class="text-slate-400 font-bold mb-1">Keluhan Awal *</label><input type="text" id="p-keluhan" placeholder="Deskripsi keluhan..." class="w-full p-2 bg-slate-950 border border-slate-600 rounded-lg text-white focus:border-amber-400 outline-none"></div>
+                        <div class="flex flex-col md:col-span-3"><label class="text-slate-400 font-bold mb-1">Riwayat Obat *</label><input type="text" id="p-obat" placeholder="Jenis formula..." class="w-full p-2 bg-slate-950 border border-slate-600 rounded-lg text-white focus:border-amber-400 outline-none"></div>
+                        <button onclick="savePatient()" class="w-full md:col-span-6 bg-cyan-600 hover:bg-cyan-500 text-white font-tech font-black tracking-wider md:tracking-widest py-2.5 rounded-lg transition-all shadow-md mt-1 md:mt-2">SIMPAN DATA & SINKRONISASI</button>
+                    </div>
+
+                    <div class="overflow-x-auto w-full flex-1 bg-slate-950 border border-slate-700 rounded-xl">
+                        <table class="w-full text-left border-collapse text-[11px] md:text-sm font-mono min-w-[750px]">
+                            <thead class="bg-slate-900 border-b-2 border-amber-500 text-slate-300 sticky top-0 z-10">
+                                <tr><th class="p-2 md:p-3">ID Reg</th><th class="p-2 md:p-3">Nama Pasien / No. WA</th><th class="p-2 md:p-3">Usia/Gen</th><th class="p-2 md:p-3 w-1/3">Rekam Medis & Obat</th><th class="p-2 md:p-3">Terakhir</th><th class="p-2 md:p-3 text-center">Aksi</th></tr>
+                            </thead>
+                            <tbody id="patient-list" class="text-slate-100 align-top divide-y divide-slate-800/80"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="tab-apotek" class="tab-content hidden-ui flex flex-col h-full">
+                    <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center border-b border-purple-500/50 pb-2 md:pb-3 mb-3 md:mb-4 gap-3">
+                        <h2 class="text-base md:text-xl font-tech font-black uppercase text-purple-400 shrink-0"><i class="fa-solid fa-pills mr-2"></i> Inventory Farmasi</h2>
+                        <div class="flex flex-col sm:flex-row items-center gap-2 w-full lg:w-auto">
+                            <div class="relative w-full sm:w-48">
+                                <i class="fa-solid fa-search absolute left-3 top-2.5 text-slate-400 text-sm"></i>
+                                <input type="text" id="search-obat" onkeyup="renderObat()" placeholder="Filter Obat..." class="w-full bg-slate-950 border border-slate-600 rounded-lg pl-9 pr-3 py-1.5 text-xs md:text-sm font-mono text-white focus:border-purple-400 outline-none">
+                            </div>
+                            <label class="w-full sm:w-auto bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white text-[11px] md:text-xs font-mono px-3 py-1.5 rounded-lg cursor-pointer flex items-center justify-center gap-2 shadow-md transition-all custom-holo-trigger" data-holo="Impor basis data obat (Format .xlsx, .csv, atau .docx). Kolom: Kode, Nama, StokAwal, StokSisa, Kategori, Efek">
+                                <i class="fa-solid fa-file-import text-purple-400"></i> Impor
+                                <input type="file" id="fileApotek" class="hidden" accept=".xlsx, .xls, .csv, .txt, .docx" onchange="importData(event, 'apotek')">
+                            </label>
+                            <button onclick="resetApotek()" class="w-full sm:w-auto bg-red-950 hover:bg-red-800 border border-red-500/50 text-red-400 hover:text-white px-3 py-1.5 rounded-lg text-[11px] md:text-xs font-mono font-bold transition-all flex items-center justify-center gap-2 shadow-[0_0_10px_rgba(239,68,68,0.2)] custom-holo-trigger" data-holo="AWAS: Mengosongkan seluruh stok obat di apotek. Data yang terhapus tidak bisa dipanggil kembali!"><i class="fa-solid fa-trash-can"></i> Hapus Semua Data</button>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900 p-3 md:p-4 rounded-xl border border-slate-700 mb-4 grid grid-cols-1 md:grid-cols-6 gap-2 md:gap-3 font-mono text-[11px] md:text-xs shadow-inner">
+                        <input type="hidden" id="drug-edit-tracker">
+                        <div class="flex flex-col md:col-span-1"><label class="text-slate-400 font-bold mb-1">Kode *</label><input type="text" id="o-id" placeholder="OBT-XXXX" class="w-full p-2 bg-slate-950 border border-slate-600 rounded-lg text-white focus:border-purple-400 outline-none"></div>
+                        <div class="flex flex-col md:col-span-2"><label class="text-slate-400 font-bold mb-1">Nama Varian Obat *</label><input type="text" id="o-nama" placeholder="Nama obat..." class="w-full p-2 bg-slate-950 border border-slate-600 rounded-lg text-white focus:border-purple-400 outline-none"></div>
+                        <div class="flex flex-col md:col-span-1"><label class="text-slate-400 font-bold mb-1">Stok Awal *</label><input type="number" id="o-stok-awal" placeholder="Angka..." class="w-full p-2 bg-slate-950 border border-slate-600 rounded-lg text-white focus:border-purple-400 outline-none"></div>
+                        <div class="flex flex-col md:col-span-1"><label class="text-slate-400 font-bold mb-1">Stok Sisa *</label><input type="number" id="o-stok-sisa" placeholder="Sisa..." class="w-full p-2 bg-slate-950 border border-slate-600 rounded-lg text-white focus:border-purple-400 outline-none"></div>
+                        <div class="flex flex-col md:col-span-1"><label class="text-slate-400 font-bold mb-1">Klasifikasi *</label><input type="text" id="o-kategori" placeholder="Tablet/Sirup..." class="w-full p-2 bg-slate-950 border border-slate-600 rounded-lg text-white focus:border-purple-400 outline-none"></div>
+                        <div class="flex flex-col md:col-span-6"><label class="text-slate-400 font-bold mb-1">Input Efek Samping *</label><input type="text" id="o-efek" placeholder="Tulis potensi efek samping..." class="w-full p-2 bg-slate-950 border border-slate-600 rounded-lg text-white focus:border-purple-400 outline-none"></div>
+                        <button onclick="saveDrug()" class="w-full md:col-span-6 bg-purple-700 hover:bg-purple-600 text-white font-tech font-black tracking-wider md:tracking-widest py-2.5 rounded-lg transition-all shadow-md mt-1 md:mt-2">SIMPAN DATA OBAT</button>
+                    </div>
+
+                    <div class="overflow-x-auto w-full flex-1 bg-slate-950 border border-slate-700 rounded-xl">
+                        <table class="w-full text-left border-collapse text-[11px] md:text-sm font-mono min-w-[750px]">
+                            <thead class="bg-slate-900 border-b-2 border-purple-500 text-slate-300 sticky top-0 z-10">
+                                <tr><th class="p-2 md:p-3">Kode</th><th class="p-2 md:p-3">Nama Obat / Kategori</th><th class="p-2 md:p-3 text-center">Stok Awal</th><th class="p-2 md:p-3 text-center border-r border-slate-700">Sisa Stok</th><th class="p-2 md:p-3 w-1/3">Indikasi Efek Samping</th><th class="p-2 md:p-3 text-center">Aksi</th></tr>
+                            </thead>
+                            <tbody id="drug-list" class="text-slate-100 align-top divide-y divide-slate-800/80"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="tab-pakar" class="tab-content hidden-ui flex flex-col h-full">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-pink-500/50 pb-2 md:pb-3 mb-3 md:mb-4 gap-3">
+                        <h2 class="text-base md:text-xl font-tech font-black uppercase text-pink-500 shrink-0"><i class="fa-solid fa-brain mr-2"></i> Sistem Pakar</h2>
+                        <div class="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto">
+                            <label class="w-full sm:w-auto bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white text-[11px] md:text-xs font-mono px-3 py-1.5 rounded-lg cursor-pointer flex items-center justify-center gap-2 shadow-md transition-all custom-holo-trigger" data-holo="Impor logika pakar (Format .xlsx, .csv, atau .docx).">
+                                <i class="fa-solid fa-file-import text-pink-500"></i> Impor Matriks
+                                <input type="file" id="filePakar" class="hidden" accept=".xlsx, .xls, .csv, .txt, .docx" onchange="importData(event, 'pakar')">
+                            </label>
+                            <button onclick="resetPakarData()" class="w-full sm:w-auto bg-red-950 hover:bg-red-800 border border-red-500/50 text-red-400 hover:text-white px-3 py-1.5 rounded-lg text-[11px] md:text-xs font-mono font-bold transition-all flex items-center justify-center gap-2 shadow-[0_0_10px_rgba(239,68,68,0.2)] custom-holo-trigger" data-holo="AWAS: Mengosongkan seluruh matriks aturan pakar. Data yang terhapus tidak bisa dipanggil kembali!"><i class="fa-solid fa-trash-can"></i> Hapus Semua Data</button>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900 p-3 md:p-4 rounded-xl border border-slate-700 mb-4 grid grid-cols-1 md:grid-cols-6 gap-2 md:gap-3 font-mono text-[11px] md:text-xs shadow-inner shrink-0">
+                        <input type="hidden" id="pakar-edit-tracker">
+                        <div class="flex flex-col md:col-span-3"><label class="text-slate-400 font-bold mb-1">Diagnosis Penyakit *</label><input type="text" id="pk-penyakit" placeholder="Nama penyakit..." class="w-full p-2 bg-slate-950 border border-slate-600 rounded-lg text-white focus:border-pink-500 outline-none"></div>
+                        <div class="flex flex-col md:col-span-3"><label class="text-slate-400 font-bold mb-1">Karakteristik Gejala Utama *</label><input type="text" id="pk-gejala" placeholder="Daftar gejala..." class="w-full p-2 bg-slate-950 border border-slate-600 rounded-lg text-white focus:border-pink-500 outline-none"></div>
+                        <div class="flex flex-col md:col-span-2"><label class="text-slate-400 font-bold mb-1">Terapi Obat *</label><input type="text" id="pk-obat" placeholder="Nama formula obat..." class="w-full p-2 bg-slate-950 border border-slate-600 rounded-lg text-white focus:border-pink-500 outline-none"></div>
+                        <div class="flex flex-col md:col-span-3"><label class="text-slate-400 font-bold mb-1">Efek Samping *</label><input type="text" id="pk-efek" placeholder="Deskripsi efek samping..." class="w-full p-2 bg-slate-950 border border-slate-600 rounded-lg text-white focus:border-pink-500 outline-none"></div>
+                        <div class="flex flex-col md:col-span-1"><label class="text-slate-400 font-bold mb-1">Akurasi (%) *</label><input type="number" id="pk-akurasi" placeholder="Mis: 95" class="w-full p-2 bg-slate-950 border border-slate-600 rounded-lg text-white focus:border-pink-500 outline-none"></div>
+                        <button onclick="savePakar()" class="w-full md:col-span-6 bg-pink-700 hover:bg-pink-600 text-white font-tech font-black tracking-wider md:tracking-widest py-2.5 rounded-lg transition-all shadow-md mt-1 md:mt-2">SIMPAN METRIK PAKAR</button>
+                    </div>
+
+                    <div class="overflow-y-auto w-full flex-1 bg-slate-950 border border-slate-700 rounded-xl hide-scrollbar h-[300px]">
+                        <table class="w-full text-left border-collapse text-[10px] sm:text-[11px] md:text-sm font-mono block md:table">
+                            <thead class="bg-slate-900 border-b-2 border-pink-500 text-slate-300 hidden md:table-header-group sticky top-0 z-10">
+                                <tr>
+                                    <th class="p-2 md:p-3 w-[15%]">Diagnosis Penyakit</th>
+                                    <th class="p-2 md:p-3 w-[25%]">Karakteristik Gejala</th>
+                                    <th class="p-2 md:p-3 w-[15%]">Terapi Obat</th>
+                                    <th class="p-2 md:p-3 w-[20%]">Efek Samping</th>
+                                    <th class="p-2 md:p-3 w-[15%]">Akurasi</th>
+                                    <th class="p-2 md:p-3 w-[10%] text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pakar-list" class="text-slate-100 block md:table-row-group divide-y divide-slate-800/80"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="tab-diagnosis" class="tab-content hidden-ui flex flex-col h-full">
+                    <div class="flex items-center gap-2 border-b border-emerald-500/50 pb-2 md:pb-3 mb-3 md:mb-4">
+                        <h2 class="text-base md:text-xl font-tech font-black uppercase text-emerald-400"><i class="fa-solid fa-file-prescription mr-2"></i> Diagnosis & Sinkronisasi Resep</h2>
+                    </div>
+                    
+                    <div class="bg-slate-900 p-3 md:p-4 rounded-xl border border-slate-700 font-mono text-[11px] md:text-sm space-y-3 md:space-y-4 shadow-inner flex-1 overflow-y-auto hide-scrollbar">
+                        <div class="flex flex-col relative">
+                            <label class="text-emerald-400 font-bold mb-1 uppercase tracking-wide">1. Cari / Pilih Pasien Terdaftar *</label>
+                            <div class="relative w-full">
+                                <input type="text" id="diag-patient-input" list="diag-patient-list" oninput="syncDiagnosisData()" placeholder="Pilih ID atau Nama pasien..." class="w-full p-2.5 pr-10 bg-slate-950 border-2 border-slate-600 rounded-lg text-white focus:border-emerald-500 outline-none custom-holo-trigger" data-holo="Ketik dan pilih pasien dari daftar untuk diberikan diagnosis.">
+                                <i class="fa-solid fa-search absolute right-3 top-3.5 text-slate-400"></i>
+                            </div>
+                            <datalist id="diag-patient-list"></datalist>
+                        </div>
+                        
+                        <div class="flex flex-col">
+                            <label class="text-pink-400 font-bold mb-1 uppercase tracking-wide">2. Analisis Gejala Sistem Pakar (Auto-Resep) *</label>
+                            <select id="diag-pakar-select" onchange="autoFillFromPakar()" class="w-full p-2.5 bg-slate-950 border-2 border-slate-600 rounded-lg text-white focus:border-pink-500 outline-none custom-holo-trigger" data-holo="Gunakan rekomendasi algoritma berbasis matriks pakar.">
+                                <option value="">-- Ketik Manual atau Pilih Rekomendasi Pakar --</option>
+                            </select>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+                            <div class="flex flex-col w-full">
+                                <label class="text-emerald-400 font-bold mb-1 uppercase tracking-wide">3. Catatan Keluhan Aktual *</label>
+                                <textarea id="diag-text" rows="3" placeholder="Ketik hasil pemeriksaan..." class="w-full p-2.5 md:p-3 bg-slate-950 border-2 border-slate-600 rounded-lg text-white focus:border-emerald-500 outline-none"></textarea>
+                            </div>
+                            <div class="flex flex-col w-full">
+                                <label class="text-purple-400 font-bold mb-1 uppercase tracking-wide">4. Sinkron Obat (Inventory) *</label>
+                                <select id="diag-drug-select" onchange="appendDrugToPrescription()" class="w-full p-2.5 md:p-3 bg-slate-950 border-2 border-slate-600 rounded-lg text-white focus:border-purple-500 outline-none custom-holo-trigger" data-holo="Pilih obat untuk ditambahkan ke draf resep dan memicu pemotongan stok otomatis.">
+                                    <option value="">-- Tambah item obat dari inventory --</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col w-full">
+                            <label class="text-emerald-400 font-bold mb-1 uppercase tracking-wide">5. Draft Resep Medis (Bisa Diedit Manual) *</label>
+                            <textarea id="med-text" rows="2" placeholder="Resep final akan dicetak..." class="w-full p-2.5 md:p-3 bg-slate-950 border-2 border-slate-600 rounded-lg text-white focus:border-emerald-500 outline-none"></textarea>
+                        </div>
+
+                        <div class="flex flex-col w-full">
+                            <label class="text-slate-400 font-bold mb-1 uppercase tracking-wide">6. Jalur Sinkronisasi WhatsApp *</label>
+                            <input type="text" id="wa-number" placeholder="08xxxxxx" class="w-full p-2.5 md:p-3 bg-slate-950 border-2 border-slate-600 rounded-lg text-white focus:border-emerald-500 outline-none">
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-col sm:flex-row gap-2 md:gap-3 mt-3 md:mt-4 shrink-0">
+                        <button onclick="processAndExport('pdf')" class="w-full flex-1 bg-slate-900 border border-red-500 text-red-400 hover:bg-red-950 hover:text-white font-tech font-black tracking-wider md:tracking-widest py-2.5 md:py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5 md:gap-2 text-[10px] md:text-sm custom-holo-trigger" data-holo="Simpan riwayat, potong stok obat otomatis, dan ekspor ke .PDF">
+                            <i class="fa-solid fa-file-pdf text-base md:text-lg"></i> SIMPAN & CETAK PDF
+                        </button>
+                        <button onclick="processAndExport('word')" class="w-full flex-1 bg-slate-900 border border-blue-500 text-blue-400 hover:bg-blue-950 hover:text-white font-tech font-black tracking-wider md:tracking-widest py-2.5 md:py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5 md:gap-2 text-[10px] md:text-sm custom-holo-trigger" data-holo="Simpan riwayat, potong stok obat otomatis, dan ekspor ke Word">
+                            <i class="fa-solid fa-file-word text-base md:text-lg"></i> SIMPAN & CETAK WORD
+                        </button>
+                        <button onclick="processAndExport('wa')" class="w-full flex-1 bg-slate-900 border border-emerald-500 text-emerald-400 hover:bg-emerald-950 hover:text-white font-tech font-black tracking-wider md:tracking-widest py-2.5 md:py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5 md:gap-2 text-[10px] md:text-sm custom-holo-trigger" data-holo="Simpan riwayat, potong stok otomatis, dan kirim via WhatsApp">
+                            <i class="fa-brands fa-whatsapp text-base md:text-lg"></i> SIMPAN & KIRIM WA
+                        </button>
+                    </div>
+                </div>
+
+            </section>
+        </div>
+    </div>
+
+    <div class="fixed bottom-4 right-4 md:bottom-5 md:right-5 z-[900] flex flex-row items-center gap-2 pointer-events-none font-mono">
+        
+        <div id="chatWindow" class="absolute bottom-14 md:bottom-16 right-0 w-[calc(100vw-2rem)] max-w-[380px] sm:w-[400px] h-[65vh] md:h-[70vh] max-h-[550px] bg-slate-900 border-2 border-cyan-500 rounded-2xl flex-col hidden overflow-hidden shadow-[0_0_30px_rgba(6,182,212,0.3)] pointer-events-auto">
+            
+            <div class="bg-gradient-to-r from-slate-950 to-slate-900 p-3 md:p-4 border-b-2 border-cyan-500 shadow-md shrink-0 flex flex-col gap-2 relative">
+                <div class="flex justify-between items-start">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-robot text-cyan-400 text-xl md:text-3xl animate-pulse"></i>
+                        <div>
+                            <h4 class="font-tech text-[10px] md:text-sm font-black text-cyan-400 tracking-wide">MEDBOT TERMINAL</h4>
+                            <span class="text-[8px] md:text-[10px] font-mono text-emerald-400 block font-black">● COGNITIVE SEARCH ENGINE V5.0</span>
+                        </div>
+                    </div>
+                    <button onclick="toggleChatWindow()" class="text-slate-400 hover:text-red-400 px-2 py-0.5 cursor-pointer font-black text-xl md:text-2xl leading-none">&minus;</button>
+                </div>
+                
+                <div class="flex justify-between items-center mt-2 border-t border-slate-800/80 pt-2 pb-1">
+                    <span class="text-[9px] md:text-[10px] font-mono font-bold text-slate-400 tracking-widest uppercase"><i class="fa-solid fa-clock mr-1"></i>SYS. TIME:</span>
+                    <div class="flex items-center gap-2">
+                        <span id="bot-real-day" class="text-[10px] md:text-xs font-black text-amber-400 tracking-wider uppercase drop-shadow-[0_0_5px_rgba(245,158,11,0.8)]">Memuat...</span>
+                        <span id="bot-real-clock" class="text-sm md:text-base font-mono font-black text-cyan-400 bg-slate-950 px-2.5 py-1 rounded-md border-2 border-cyan-500/50 shadow-[0_0_10px_rgba(6,182,212,0.4)]">00:00:00</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="chatMessages" class="flex-1 p-3 overflow-y-auto space-y-3 font-mono text-xs sm:text-sm text-white bg-slate-950">
+                <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-700 max-w-[90%] md:max-w-[85%] leading-relaxed text-justify shadow-md">
+                    <span class="text-cyan-400 text-[10px] md:text-xs block font-black mb-1"><i class="fa-solid fa-terminal"></i> ASSISTANT ONLINE:</span>
+                    Halo! Saya **MedBot V5.0**. Ketik perintah seperti <b class="text-amber-400">"cari pasien [nama]"</b>, <b class="text-purple-400">"cari obat [nama]"</b>, atau <b class="text-pink-400">"jelaskan [nama penyakit/obat]"</b> untuk mendapatkan deskripsi cerdas dari sistem pakar.
+                </div>
+            </div>
+
+            <div class="bg-slate-900 px-3 py-2.5 flex gap-2 border-t border-slate-800 overflow-x-auto shrink-0 hide-scrollbar shadow-inner">
+                <button type="button" onclick="showProgrammerInfoBot()" class="bg-slate-950 border border-amber-500/50 text-amber-400 text-[10px] md:text-xs px-3 py-1.5 rounded-full font-bold hover:bg-amber-500/20 whitespace-nowrap transition-all shadow-sm flex items-center gap-1.5">
+                    <i class="fa-solid fa-user-astronaut"></i> Profil Programmer
+                </button>
+            </div>
+
+            <form class="p-2.5 bg-slate-900 border-t border-slate-800 flex gap-2 shrink-0" onsubmit="handleChatSubmit(event)">
+                <input type="text" id="chatInput" autocomplete="off" placeholder="Ketik perintah..." class="flex-1 w-0 bg-slate-950 border-2 border-slate-700 rounded-xl px-3 py-2 text-xs md:text-sm text-white focus:outline-none focus:border-cyan-400 font-bold">
+                <button type="submit" class="bg-cyan-600 hover:bg-cyan-500 text-white px-4 py-2 rounded-xl font-black cursor-pointer flex items-center justify-center shrink-0"><i class="fa-solid fa-paper-plane text-sm"></i></button>
+            </form>
+        </div>
+
+        <div class="flex items-center gap-2 pointer-events-auto">
+            <button onclick="triggerScreensaverManual()" class="h-10 w-10 md:h-12 md:w-12 rounded-full bg-slate-950 border-2 border-cyan-500 text-cyan-400 flex items-center justify-center shadow-2xl cursor-pointer hover:scale-110 transition-transform custom-holo-trigger" data-holo="Aktifkan Screensaver Mode Pelindung Privasi.">
+                <i class="fa-solid fa-desktop text-sm md:text-lg"></i>
+            </button>
+            <button onclick="toggleChatWindow()" class="h-12 w-12 md:h-14 md:w-14 rounded-full bg-gradient-to-r from-cyan-600 to-cyan-400 border-2 border-white flex items-center justify-center text-slate-950 shadow-[0_0_20px_rgba(6,182,212,0.8)] cursor-pointer hover:scale-105 transition-transform relative custom-holo-trigger" data-holo="Buka Asisten Digital MedBot (Pencarian & Penjelasan Cerdas).">
+                <i class="fa-solid fa-comments text-xl md:text-2xl"></i>
+                <span class="absolute top-0 right-0 h-3 w-3 md:h-3.5 md:w-3.5 bg-emerald-400 rounded-full border-2 border-white animate-ping"></span>
+            </button>
+        </div>
+    </div>
+
+    <div id="creatorModal" class="fixed inset-0 z-[1100] hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 select-none">
+        <div id="draggablePanel" class="bg-slate-900 border-2 border-cyan-500 rounded-2xl w-full max-w-md p-5 absolute shadow-[0_0_50px_rgba(6,182,212,0.6)]">
+            <div id="dragHandle" class="drag-handle text-center pb-3 mb-4 border-b border-slate-800 flex flex-col items-center justify-center relative cursor-move">
+                <div class="absolute -top-3 px-3 py-1 rounded-full bg-slate-950 text-[9px] md:text-[10px] font-mono font-bold text-cyan-400 tracking-widest border border-cyan-500 shadow-md hidden sm:block">
+                    <i class="fa-solid fa-arrows-up-down-left-right mr-1"></i> HOLD AND DRAG WINDOW
+                </div>
+                <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-950 rounded-full border-2 border-cyan-500 flex items-center justify-center text-cyan-400 text-xl md:text-2xl mt-4 mb-2 shadow-[0_0_15px_rgba(6,182,212,0.5)] relative">
+                    <i class="fa-solid fa-user-gear relative z-10"></i>
+                    <div class="absolute inset-0 rounded-full border border-cyan-400 animate-ping opacity-50"></div>
+                </div>
+                <h3 class="text-base md:text-xl font-black font-tech text-cyan-400 tracking-wider filter drop-shadow-[0_0_5px_rgba(6,182,212,0.8)]">MOHAMAD HARTADI (ADI)</h3>
+                <p class="text-[10px] md:text-xs font-mono font-bold text-slate-300 mt-1">Software Engineer & UI/UX Architect</p>
+                <button onclick="closeCreatorModal()" class="absolute top-0 right-0 text-slate-400 hover:text-red-400 text-3xl font-black p-1 cursor-pointer transition-colors">&times;</button>
+            </div>
+            
+            <div class="space-y-3 font-mono text-[11px] md:text-sm font-bold">
+                <a href="https://www.facebook.com/m.hartadi" target="_blank" class="group relative overflow-hidden flex items-center gap-3 bg-slate-950 p-3 rounded-xl border border-blue-500/50 hover:border-blue-400 hover:scale-105 transition-all shadow-md block">
+                    <div class="before:absolute before:inset-0 before:-translate-x-full group-hover:before:animate-[shimmer_1.5s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent z-0"></div>
+                    <i class="fa-brands fa-facebook text-blue-400 text-2xl w-8 text-center shrink-0 relative z-10"></i>
+                    <div class="min-w-0 relative z-10">
+                        <span class="block text-[8px] md:text-[9px] text-slate-400 tracking-wide uppercase">Profil Facebook Resmi</span>
+                        <span class="text-blue-400 font-bold block truncate">facebook.com/m.hartadi</span>
+                    </div>
+                </a>
+                
+                <a href="https://newbieonline7.blogspot.com/" target="_blank" class="group relative overflow-hidden flex items-center gap-3 bg-slate-950 p-3 rounded-xl border border-amber-500/50 hover:border-amber-400 hover:scale-105 transition-all shadow-md block">
+                    <div class="before:absolute before:inset-0 before:-translate-x-full group-hover:before:animate-[shimmer_1.5s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent z-0"></div>
+                    <i class="fa-solid fa-globe text-amber-500 text-2xl w-8 text-center shrink-0 relative z-10"></i>
+                    <div class="min-w-0 relative z-10">
+                        <span class="block text-[8px] md:text-[9px] text-slate-400 tracking-wide uppercase">Blog & Portofolio Profesional</span>
+                        <span class="text-amber-400 font-bold block truncate">newbieonline7.blogspot.com</span>
+                    </div>
+                </a>
+                
+                <a href="https://wa.me/6282231036047?text=Halo%20Adi,%20saya%20tertarik%20dengan%20DARUSSYIFA%20MEDIKA" target="_blank" class="group relative overflow-hidden flex items-center gap-3 bg-slate-950 p-3 rounded-xl border border-emerald-500/50 hover:border-emerald-400 hover:scale-105 transition-all shadow-md block">
+                    <div class="before:absolute before:inset-0 before:-translate-x-full group-hover:before:animate-[shimmer_1.5s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent z-0"></div>
+                    <i class="fa-brands fa-whatsapp text-emerald-400 text-2xl w-8 text-center shrink-0 relative z-10"></i>
+                    <div class="min-w-0 relative z-10">
+                        <span class="block text-[8px] md:text-[9px] text-slate-400 tracking-wide uppercase">Kontak Enkripsi WhatsApp</span>
+                        <span class="text-emerald-400 font-bold block truncate">082231036047</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- DATABASE DEFAULT KOMPREHENSIF ---
+        let patients = JSON.parse(localStorage.getItem('DARUSSYIFA_MED_DB')) || [];
+        
+        let drugs = JSON.parse(localStorage.getItem('DARUSSYIFA_DRUG_DB')) || [
+            { id: 'OBT-001', nama: 'Paracetamol 500mg', stokAwal: 500, stokSisa: 480, kategori: 'Tablet', efek: 'Aman untuk lambung, mengantuk ringan.' },
+            { id: 'OBT-002', nama: 'Amoxicillin 500mg', stokAwal: 300, stokSisa: 250, kategori: 'Kapsul', efek: 'Gangguan pencernaan, mual ringan.' },
+            { id: 'OBT-003', nama: 'Ibuprofen 400mg', stokAwal: 200, stokSisa: 190, kategori: 'Tablet', efek: 'Nyeri lambung jika diminum sebelum makan.' },
+            { id: 'OBT-004', nama: 'Cefadroxil 500mg', stokAwal: 150, stokSisa: 145, kategori: 'Kapsul', efek: 'Diare ringan, reaksi alergi kulit.' }
+        ];
+
+        let pakarRules = JSON.parse(localStorage.getItem('DARUSSYIFA_PAKAR_DB')) || [
+            { id: 'PK-01', penyakit: 'Influenza Klinis', gejala: 'Demam tinggi, bersin berkala, nyeri sendi tubuh', obat: 'Paracetamol 500mg, Loratadine 10mg', efek: 'Kantuk ringan', akurasi: 95 },
+            { id: 'PK-02', penyakit: 'ISPA', gejala: 'Radang tenggorokan akut, batuk, demam fluktuatif', obat: 'Amoxicillin 500mg', efek: 'Gangguan pencernaan', akurasi: 92 },
+            { id: 'PK-03', penyakit: 'Migrain / Cephalgia', gejala: 'Sakit kepala sebelah berdenyut, sensitif cahaya', obat: 'Ibuprofen 400mg', efek: 'Nyeri lambung', akurasi: 90 }
+        ];
+
+        let activeVisualTheme = "dark";
+        let systemIdleTimeSeconds = 0;
+        let isScreensaverActive = false;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            runTimeSynchronization();
+            setupScreensaverWatchdog();
+            setupHolographicTooltips();
+            
+            loadPatients();
+            renderObat();
+            renderPakar();
+            populateDiagnosisSelects();
+            
+            setTimeout(() => {
+                const loader = document.getElementById('startupLoader');
+                loader.classList.add('opacity-0');
+                setTimeout(() => loader.classList.add('hidden'), 700);
+            }, 3000); 
+        });
+
+        // --- MASTER DATABASE EXPORT/IMPORT LOGIC ---
+        function exportMasterDB() {
+            const masterDB = { patients, drugs, pakar: pakarRules };
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(masterDB, null, 2));
+            const dlAnchorElem = document.createElement('a');
+            dlAnchorElem.setAttribute("href", dataStr);
+            dlAnchorElem.setAttribute("download", `Darussyifa_MasterDB_${new Date().toISOString().slice(0,10)}.json`);
+            document.body.appendChild(dlAnchorElem);
+            dlAnchorElem.click();
+            dlAnchorElem.remove();
+        }
+
+        function importMasterDB(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if(data.patients && data.drugs && data.pakar) {
+                        if(confirm('Tindakan ini akan menimpa (overwrite) seluruh database saat ini dengan data dari file backup. Lanjutkan?')) {
+                            localStorage.setItem('DARUSSYIFA_MED_DB', JSON.stringify(data.patients));
+                            localStorage.setItem('DARUSSYIFA_DRUG_DB', JSON.stringify(data.drugs));
+                            localStorage.setItem('DARUSSYIFA_PAKAR_DB', JSON.stringify(data.pakar));
+                            
+                            patients = data.patients; drugs = data.drugs; pakarRules = data.pakar;
+                            
+                            loadPatients(); renderObat(); renderPakar(); populateDiagnosisSelects();
+                            alert("Master Database berhasil dipulihkan secara penuh!");
+                        }
+                    } else { alert("Format file Master Database tidak dikenali."); }
+                } catch (err) { alert("Gagal membaca dan memproses file JSON."); }
+                event.target.value = '';
+            };
+            reader.readAsText(file);
+        }
+
+        // --- SISTEM PEMBACAAN FILE ---
+        function importData(event, type) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            const fileName = file.name.toLowerCase();
+
+            if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls') || fileName.endsWith('.csv')) {
+                reader.onload = function(e) {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, {type: 'array'});
+                    const firstSheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheetName];
+                    const json = XLSX.utils.sheet_to_json(worksheet);
+                    processImportedJSON(json, type);
+                };
+                reader.readAsArrayBuffer(file);
+            } else if (fileName.endsWith('.docx')) {
+                reader.onload = function(e) {
+                    mammoth.extractRawText({arrayBuffer: e.target.result})
+                        .then(function(result) {
+                            parseRawText(result.value, type);
+                        }).catch(function(err) { console.error(err); alert("Gagal membaca DOCX."); });
+                };
+                reader.readAsArrayBuffer(file);
+            } else if (fileName.endsWith('.txt')) {
+                reader.onload = function(e) { parseRawText(e.target.result, type); };
+                reader.readAsText(file);
+            } else {
+                alert("Format file tidak didukung!");
+            }
+            event.target.value = '';
+        }
+
+        function processImportedJSON(json, type) {
+            if(!json || json.length === 0) { alert("File kosong atau format salah."); return; }
+            if (type === 'apotek') {
+                json.forEach(row => {
+                    const id = row.Kode || 'OBT-' + Math.floor(Math.random() * 9000);
+                    drugs.push({ id, nama: row.Nama || row.Obat || 'Unknown', stokAwal: row.StokAwal || 100, stokSisa: row.StokSisa || 100, kategori: row.Kategori || '-', efek: row.Efek || row.EfekSamping || '-' });
+                });
+                localStorage.setItem('DARUSSYIFA_DRUG_DB', JSON.stringify(drugs)); renderObat(); populateDiagnosisSelects(); alert("Data Apotek berhasil diimpor!");
+            } else if (type === 'pakar') {
+                json.forEach(row => {
+                    const id = row.ID || 'PK-' + Math.floor(Math.random() * 9000);
+                    pakarRules.push({ id, penyakit: row.Penyakit || row.Diagnosis || 'Unknown', gejala: row.Gejala || row.Karakteristik || '-', obat: row.Obat || row.Terapi || '-', efek: row.Efek || row.EfekSamping || '-', akurasi: row.Akurasi || 90 });
+                });
+                localStorage.setItem('DARUSSYIFA_PAKAR_DB', JSON.stringify(pakarRules)); renderPakar(); populateDiagnosisSelects(); alert("Data Pakar berhasil diimpor!");
+            }
+        }
+
+        function parseRawText(text, type) {
+            const lines = text.split('\n').filter(line => line.trim() !== '');
+            if(lines.length < 2) return alert("Format teks tidak terbaca. Pastikan ada pemisah koma atau baris yang jelas.");
+            processImportedJSON(lines.map(line => {
+                const cols = line.split(/[,|]/);
+                if (type === 'pakar') return { Penyakit: cols[0], Gejala: cols[1], Obat: cols[2], Efek: cols[3], Akurasi: cols[4] ? parseInt(cols[4]) : 90 };
+                else return { Kode: cols[0], Nama: cols[1], StokAwal: cols[2]?parseInt(cols[2]):100, StokSisa: cols[3]?parseInt(cols[3]):100, Kategori: cols[4], Efek: cols[5] };
+            }), type);
+        }
+
+        // --- CORE UI FUNCTIONS ---
+        function switchTab(tabId, btnContext) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden-ui'));
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden-ui');
+            if(btnContext) {
+                document.querySelectorAll('.nav-btn').forEach(b => b.className = "nav-btn whitespace-nowrap flex-shrink-0 lg:w-full text-left px-4 py-2.5 md:py-3 rounded-xl text-[var(--text-main)] hover:bg-cyan-500/10 flex items-center transition-colors border border-transparent custom-holo-trigger");
+                btnContext.className = "nav-btn whitespace-nowrap flex-shrink-0 lg:w-full text-left px-4 py-2.5 md:py-3 rounded-xl bg-cyan-600 text-white flex items-center transition-colors shadow-md custom-holo-trigger";
+            }
+            if(tabId === 'diagnosis') populateDiagnosisSelects();
+        }
+
+        function toggleThemeMode() {
+            const body = document.getElementById("appBody");
+            if (activeVisualTheme === "dark") {
+                body.classList.remove("theme-dark"); body.classList.add("theme-light");
+                document.getElementById("themeIcon").className = "fa-solid fa-sun text-sm text-amber-600";
+                document.getElementById("themeText").innerText = "LIGHT";
+                activeVisualTheme = "light";
+            } else {
+                body.classList.remove("theme-light"); body.classList.add("theme-dark");
+                document.getElementById("themeIcon").className = "fa-solid fa-moon text-sm";
+                document.getElementById("themeText").innerText = "DARK";
+                activeVisualTheme = "dark";
+            }
+        }
+
+        function setupHolographicTooltips() {
+            const tipBox = document.getElementById("holoTooltipBox");
+            let tooltipTimeout;
+
+            document.querySelectorAll(".custom-holo-trigger").forEach(el => {
+                el.addEventListener("mouseenter", () => {
+                    tipBox.innerHTML = `<i class="fa-solid fa-satellite-dish text-cyan-400 animate-pulse mr-1"></i> ${el.getAttribute("data-holo")}`;
+                    tipBox.style.display = "block";
+                    clearTimeout(tooltipTimeout);
+                    tooltipTimeout = setTimeout(() => { tipBox.style.display = "none"; }, 4000); 
+                });
+                el.addEventListener("mousemove", (e) => {
+                    let posX = e.clientX + 15; let posY = e.clientY + 15;
+                    if (posX + tipBox.offsetWidth > window.innerWidth) posX = e.clientX - tipBox.offsetWidth - 15;
+                    if (posY + tipBox.offsetHeight > window.innerHeight) posY = e.clientY - tipBox.offsetHeight - 15;
+                    tipBox.style.left = posX + "px"; tipBox.style.top = posY + "px";
+                    
+                    clearTimeout(tooltipTimeout);
+                    tooltipTimeout = setTimeout(() => { tipBox.style.display = "none"; }, 4000);
+                });
+                el.addEventListener("mouseleave", () => { 
+                    clearTimeout(tooltipTimeout);
+                    tipBox.style.display = "none"; 
+                });
+            });
+        }
+
+        function runTimeSynchronization() {
+            const dayArr = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+            const monthArr = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+            let tzName = Intl.DateTimeFormat().resolvedOptions().timeZone.split('/').pop().toUpperCase() || "WIB";
+            
+            document.getElementById('lbl-timezone').innerText = tzName;
+            document.getElementById('scTimezoneDisplay').innerText = tzName;
+
+            setInterval(() => {
+                const current = new Date();
+                const dayStr = `${dayArr[current.getDay()]}, ${current.getDate()} ${monthArr[current.getMonth()]} ${current.getFullYear()}`;
+                const timeStr = current.toTimeString().split(' ')[0];
+                
+                document.getElementById('lbl-real-day').innerText = dayStr;
+                document.getElementById('lbl-real-clock').innerText = timeStr;
+                
+                const botDay = document.getElementById('bot-real-day');
+                const botClock = document.getElementById('bot-real-clock');
+                if (botDay) botDay.innerText = dayStr;
+                if (botClock) botClock.innerText = timeStr + " " + tzName;
+
+                if (isScreensaverActive) {
+                    document.getElementById('scClockDisplay').innerText = timeStr;
+                    document.getElementById('scDateDisplay').innerText = dayStr;
+                }
+            }, 1000);
+        }
+
+        // --- CRUD LOGICS & RESET LOGICS ---
+        function savePatient() {
+            let idInput = document.getElementById('p-id').value.trim() || 'DM-' + Math.floor(Math.random() * 9000);
+            const nama = document.getElementById('p-nama').value.trim(), usia = document.getElementById('p-usia').value;
+            const gender = document.getElementById('p-gender').value, keluhan = document.getElementById('p-keluhan').value.trim();
+            const tglBerobat = document.getElementById('p-tanggal').value || new Date().toISOString();
+            const obat = document.getElementById('p-obat').value.trim(), wa = document.getElementById('p-wa').value.trim();
+            const trackerId = document.getElementById('edit-id-tracker').value;
+            if(!nama || !usia) return alert("Nama dan Usia wajib.");
+            
+            if(trackerId) { 
+                const idx = patients.findIndex(p => p.id === trackerId); 
+                patients[idx] = { id: idInput, nama, usia, gender, keluhan, lastVisit: tglBerobat, wa, obat }; 
+            } 
+            else { patients.push({ id: idInput, nama, usia, gender, keluhan, wa, obat, lastVisit: tglBerobat }); }
+            
+            localStorage.setItem('DARUSSYIFA_MED_DB', JSON.stringify(patients)); 
+            clearForm('#tab-pasien'); loadPatients();
+        }
+
+        function loadPatients() {
+            document.getElementById('stat-pasien').innerText = patients.length;
+            const term = document.getElementById('search-pasien')?.value.toLowerCase() || '';
+            document.getElementById('patient-list').innerHTML = patients.filter(p => p.nama.toLowerCase().includes(term) || p.id.toLowerCase().includes(term)).map(p => `
+                <tr class="hover:bg-slate-900/60 cursor-pointer transition-colors">
+                    <td class="p-2 md:p-3 text-cyan-400 font-bold whitespace-nowrap">${p.id}</td><td class="p-2 md:p-3 font-bold whitespace-nowrap">${p.nama}<br><span class="text-[9px] md:text-[10px] text-emerald-400"><i class="fa-brands fa-whatsapp"></i> ${p.wa || '-'}</span></td>
+                    <td class="p-2 md:p-3 whitespace-nowrap">${p.usia} Th / ${p.gender}</td><td class="p-2 md:p-3 text-[10px] md:text-xs leading-relaxed min-w-[200px] md:min-w-[250px]"><span class="text-amber-400 block mb-1 md:mb-1.5"><i class="fa-solid fa-stethoscope"></i> ${p.keluhan || '-'}</span><span class="text-purple-400 block"><i class="fa-solid fa-capsules"></i> ${p.obat || '-'}</span></td>
+                    <td class="p-2 md:p-3 text-cyan-200 text-[10px] md:text-[11px] whitespace-nowrap">${new Date(p.lastVisit).toLocaleDateString('id-ID')}</td>
+                    <td class="p-2 md:p-3 text-center whitespace-nowrap"><button onclick="editPatient('${p.id}')" class="text-amber-400 mr-2 hover:text-white"><i class="fa-solid fa-pen-to-square"></i></button><button onclick="deletePatient('${p.id}')" class="text-red-400 hover:text-white"><i class="fa-solid fa-trash"></i></button></td>
+                </tr>`).join('');
+        }
+        function editPatient(id) {
+            const p = patients.find(x => x.id === id); if(!p) return;
+            document.getElementById('edit-id-tracker').value = p.id; document.getElementById('p-id').value = p.id; document.getElementById('p-nama').value = p.nama; document.getElementById('p-usia').value = p.usia; document.getElementById('p-gender').value = p.gender; document.getElementById('p-keluhan').value = p.keluhan || ""; document.getElementById('p-wa').value = p.wa || ""; document.getElementById('p-obat').value = p.obat || "";
+            if(p.lastVisit) { let d = new Date(p.lastVisit); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); document.getElementById('p-tanggal').value = d.toISOString().slice(0,16); }
+        }
+        function deletePatient(id) { if(confirm('Hapus pasien?')) { patients = patients.filter(x => x.id !== id); localStorage.setItem('DARUSSYIFA_MED_DB', JSON.stringify(patients)); loadPatients(); } }
+        function searchPatient() { loadPatients(); }
+        
+        function resetPasien() {
+            if(confirm("PERINGATAN KRITIS!\n\nAnda akan menghapus SEMUA DATA PASIEN. Data yang telah dihapus TIDAK BISA DIPANGGIL KEMBALI.\n\nKlik 'Cancel/Batal' jika ini adalah kesalahan.")) {
+                patients = [];
+                localStorage.setItem('DARUSSYIFA_MED_DB', JSON.stringify(patients));
+                loadPatients();
+                populateDiagnosisSelects();
+                alert("Semua data pasien telah berhasil dikosongkan.");
+            }
+        }
+
+        function saveDrug() {
+            const id = document.getElementById('o-id').value.trim() || 'OBT-' + Math.floor(Math.random() * 9000);
+            const nama = document.getElementById('o-nama').value.trim(), kategori = document.getElementById('o-kategori').value.trim(), efek = document.getElementById('o-efek').value.trim();
+            const stokAwal = parseInt(document.getElementById('o-stok-awal').value) || 0, stokSisa = parseInt(document.getElementById('o-stok-sisa').value) || 0;
+            const trackerId = document.getElementById('drug-edit-tracker').value;
+            if(!nama) return alert("Nama Obat harus diisi.");
+            if(trackerId) { const idx = drugs.findIndex(d => d.id === trackerId); drugs[idx] = { id, nama, stokAwal, stokSisa, kategori, efek }; } 
+            else { drugs.push({ id, nama, stokAwal, stokSisa, kategori, efek }); }
+            localStorage.setItem('DARUSSYIFA_DRUG_DB', JSON.stringify(drugs)); clearForm('#tab-apotek'); renderObat(); populateDiagnosisSelects();
+        }
+
+        function renderObat() {
+            document.getElementById('stat-obat').innerText = drugs.length;
+            const term = document.getElementById('search-obat')?.value.toLowerCase() || '';
+            document.getElementById('drug-list').innerHTML = drugs.filter(d => d.nama.toLowerCase().includes(term) || d.id.toLowerCase().includes(term)).map(d => `
+                <tr class="hover:bg-slate-900 transition-colors">
+                    <td class="p-2 md:p-3 text-purple-400 font-bold whitespace-nowrap">${d.id}</td><td class="p-2 md:p-3 font-bold whitespace-nowrap">${d.nama}<br><span class="text-[9px] md:text-[10px] text-slate-400">${d.kategori}</span></td>
+                    <td class="p-2 md:p-3 font-bold text-slate-300 text-center">${d.stokAwal}</td><td class="p-2 md:p-3 font-bold ${d.stokSisa < 15 ? 'text-red-400 animate-pulse' : 'text-emerald-400'} text-center border-r border-slate-700">${d.stokSisa}</td>
+                    <td class="p-2 md:p-3 text-slate-400 text-[10px] md:text-[11px] w-1/3 min-w-[200px]">${d.efek || '-'}</td>
+                    <td class="p-2 md:p-3 text-center whitespace-nowrap"><button onclick="editDrug('${d.id}')" class="text-amber-400 mr-2 hover:text-white"><i class="fa-solid fa-pen-to-square"></i></button><button onclick="deleteDrug('${d.id}')" class="text-red-400 hover:text-white"><i class="fa-solid fa-trash"></i></button></td>
+                </tr>`).join('');
+        }
+        function editDrug(id) { const d = drugs.find(x => x.id === id); if(d) { document.getElementById('drug-edit-tracker').value = d.id; document.getElementById('o-id').value = d.id; document.getElementById('o-nama').value = d.nama; document.getElementById('o-stok-awal').value = d.stokAwal; document.getElementById('o-stok-sisa').value = d.stokSisa; document.getElementById('o-kategori').value = d.kategori; document.getElementById('o-efek').value = d.efek || ""; } }
+        function deleteDrug(id) { if(confirm('Hapus obat?')) { drugs = drugs.filter(x => x.id !== id); localStorage.setItem('DARUSSYIFA_DRUG_DB', JSON.stringify(drugs)); renderObat(); populateDiagnosisSelects(); } }
+
+        function resetApotek() {
+            if(confirm("PERINGATAN KRITIS!\n\nAnda akan menghapus SEMUA DATA OBAT (Inventory Apotek). Data yang telah dihapus TIDAK BISA DIPANGGIL KEMBALI.\n\nKlik 'Cancel/Batal' jika ini adalah kesalahan.")) {
+                drugs = [];
+                localStorage.setItem('DARUSSYIFA_DRUG_DB', JSON.stringify(drugs));
+                renderObat();
+                populateDiagnosisSelects();
+                alert("Semua data stok obat telah berhasil dikosongkan.");
+            }
+        }
+
+        function savePakar() {
+            const id = document.getElementById('pakar-edit-tracker').value || 'PK-' + Math.floor(Math.random() * 9000);
+            const penyakit = document.getElementById('pk-penyakit').value.trim(), gejala = document.getElementById('pk-gejala').value.trim(), obat = document.getElementById('pk-obat').value.trim(), efek = document.getElementById('pk-efek').value.trim(), akurasi = parseInt(document.getElementById('pk-akurasi').value) || 0;
+            const trackerId = document.getElementById('pakar-edit-tracker').value;
+            if(!penyakit || !gejala) return alert("Diagnosis dan Gejala wajib diisi.");
+            if(trackerId) { const idx = pakarRules.findIndex(p => p.id === trackerId); pakarRules[idx] = { id, penyakit, gejala, obat, efek, akurasi }; } 
+            else { pakarRules.push({ id, penyakit, gejala, obat, efek, akurasi }); }
+            localStorage.setItem('DARUSSYIFA_PAKAR_DB', JSON.stringify(pakarRules)); clearForm('#tab-pakar'); renderPakar(); populateDiagnosisSelects();
+        }
+
+        function renderPakar() {
+            document.getElementById('stat-pakar').innerText = pakarRules.length;
+            document.getElementById('pakar-list').innerHTML = pakarRules.map(p => `
+                <tr class="hover:bg-slate-900/40 transition-colors flex flex-col md:table-row border-b-2 border-slate-700/50 md:border-b p-3 md:p-0 gap-1.5 md:gap-0">
+                    <td class="md:p-2 md:p-3 text-pink-400 font-bold block md:table-cell w-full md:w-[15%]">
+                        <span class="md:hidden text-slate-500 font-mono text-[9px] uppercase tracking-wider block mb-0.5">Diagnosis Penyakit</span>${p.penyakit}
+                    </td>
+                    <td class="md:p-2 md:p-3 text-slate-300 text-[10px] md:text-xs block md:table-cell w-full md:w-[25%]">
+                        <span class="md:hidden text-slate-500 font-mono text-[9px] uppercase tracking-wider block mb-0.5">Karakteristik Gejala</span>${p.gejala}
+                    </td>
+                    <td class="md:p-2 md:p-3 text-purple-300 font-bold block md:table-cell w-full md:w-[15%]">
+                        <span class="md:hidden text-slate-500 font-mono text-[9px] uppercase tracking-wider block mb-0.5">Terapi Obat</span>${p.obat}
+                    </td>
+                    <td class="md:p-2 md:p-3 text-slate-400 text-[10px] md:text-[11px] block md:table-cell w-full md:w-[20%]">
+                        <span class="md:hidden text-slate-500 font-mono text-[9px] uppercase tracking-wider block mb-0.5">Efek Samping</span>${p.efek}
+                    </td>
+                    <td class="md:p-2 md:p-3 block md:table-cell w-full md:w-[15%]">
+                        <span class="md:hidden text-slate-500 font-mono text-[9px] uppercase tracking-wider block mb-0.5">Akurasi</span>
+                        <div class="flex items-center gap-2 w-full md:w-32"><span class="font-bold text-white text-[10px] md:text-xs">${p.akurasi}%</span><div class="flex-1 bg-slate-800 h-2 rounded-full overflow-hidden w-full"><div class="bg-gradient-to-r from-pink-500 to-cyan-400 h-full" style="width: ${p.akurasi}%"></div></div></div>
+                    </td>
+                    <td class="md:p-2 md:p-3 text-left md:text-center mt-2 md:mt-0 block md:table-cell w-full md:w-[10%]">
+                        <div class="flex items-center justify-start md:justify-center gap-2">
+                            <button onclick="editPakar('${p.id}')" class="text-amber-400 hover:text-white bg-slate-800 md:bg-transparent px-3 py-1.5 md:p-0 rounded border border-amber-500/30 md:border-none flex items-center gap-1.5 transition-colors shadow-sm md:shadow-none"><i class="fa-solid fa-pen-to-square"></i> <span class="md:hidden text-[10px] font-bold">Edit</span></button>
+                            <button onclick="deletePakar('${p.id}')" class="text-red-400 hover:text-white bg-slate-800 md:bg-transparent px-3 py-1.5 md:p-0 rounded border border-red-500/30 md:border-none flex items-center gap-1.5 transition-colors shadow-sm md:shadow-none"><i class="fa-solid fa-trash"></i> <span class="md:hidden text-[10px] font-bold">Hapus</span></button>
+                        </div>
+                    </td>
+                </tr>`).join('');
+        }
+        function editPakar(id) { const p = pakarRules.find(x => x.id === id); if(p) { document.getElementById('pakar-edit-tracker').value = p.id; document.getElementById('pk-penyakit').value = p.penyakit; document.getElementById('pk-gejala').value = p.gejala; document.getElementById('pk-obat').value = p.obat; document.getElementById('pk-efek').value = p.efek; document.getElementById('pk-akurasi').value = p.akurasi; } }
+        function deletePakar(id) { if(confirm('Hapus rule pakar?')) { pakarRules = pakarRules.filter(x => x.id !== id); localStorage.setItem('DARUSSYIFA_PAKAR_DB', JSON.stringify(pakarRules)); renderPakar(); populateDiagnosisSelects(); } }
+
+        function resetPakarData() {
+            if(confirm("PERINGATAN KRITIS!\n\nAnda akan menghapus SEMUA MATRIKS SISTEM PAKAR. Data yang telah dihapus TIDAK BISA DIPANGGIL KEMBALI.\n\nKlik 'Cancel/Batal' jika ini adalah kesalahan.")) {
+                pakarRules = [];
+                localStorage.setItem('DARUSSYIFA_PAKAR_DB', JSON.stringify(pakarRules));
+                renderPakar();
+                populateDiagnosisSelects();
+                alert("Semua data matriks pakar telah berhasil dikosongkan.");
+            }
+        }
+
+        function clearForm(tabId) { document.querySelectorAll(`${tabId} input[type="text"], ${tabId} input[type="number"], ${tabId} input[type="hidden"]`).forEach(i => i.value = ''); }
+
+        // --- DIAGNOSIS & EXPORT ---
+        function populateDiagnosisSelects() {
+            document.getElementById('diag-patient-list').innerHTML = patients.map(p => `<option value="${p.id} - ${p.nama}">`).join('');
+            document.getElementById('diag-pakar-select').innerHTML = '<option value="">-- Pilih Rekomendasi Pakar --</option>' + pakarRules.map(p => `<option value="${p.id}">${p.penyakit}</option>`).join('');
+            document.getElementById('diag-drug-select').innerHTML = '<option value="">-- Tambah item obat dari inventory --</option>' + drugs.map(d => `<option value="${d.id}">${d.nama} [Sisa: ${d.stokSisa}]</option>`).join('');
+        }
+
+        function syncDiagnosisData() {
+            const pId = document.getElementById('diag-patient-input').value.split(" - ")[0];
+            const p = patients.find(x => x.id === pId);
+            if(p) { document.getElementById('diag-text').value = p.keluhan || ""; document.getElementById('med-text').value = p.obat ? `- ${p.obat}` : ""; document.getElementById('wa-number').value = p.wa || ""; }
+        }
+
+        function autoFillFromPakar() {
+            const pkId = document.getElementById('diag-pakar-select').value;
+            const pk = pakarRules.find(x => x.id === pkId);
+            if(pk) {
+                document.getElementById('diag-text').value = `Diagnosis: ${pk.penyakit}\nGejala: ${pk.gejala}`;
+                document.getElementById('med-text').value = `- ${pk.obat}${pk.efek ? ` (Efek Samping: ${pk.efek})` : ""}`;
+            }
+        }
+
+        function appendDrugToPrescription() {
+            const drugId = document.getElementById('diag-drug-select').value;
+            const d = drugs.find(x => x.id === drugId);
+            if(d) {
+                let currentDraft = document.getElementById('med-text').value;
+                document.getElementById('med-text').value = currentDraft + (currentDraft ? "\n" : "") + `- ${d.nama} (1 Unit)${d.efek && d.efek !== '-' ? `\n   > Info Efek Samping: ${d.efek}` : ""}`;
+            }
+        }
+
+        function processAndExport(type) {
+            const val = document.getElementById('diag-patient-input').value;
+            const pId = val.split(" - ")[0];
+            const diagnosis = document.getElementById('diag-text').value;
+            const prescriptionText = document.getElementById('med-text').value;
+
+            if(!pId) return alert("Pilih pasien target terlebih dahulu.");
+            const pIndex = patients.findIndex(x => x.id === pId);
+            if(pIndex === -1) return;
+
+            drugs.forEach((d, idx) => { if(prescriptionText.includes(d.nama) && drugs[idx].stokSisa > 0) drugs[idx].stokSisa -= 1; });
+            localStorage.setItem('DARUSSYIFA_DRUG_DB', JSON.stringify(drugs)); renderObat(); populateDiagnosisSelects();
+
+            patients[pIndex].keluhan = diagnosis; patients[pIndex].obat = prescriptionText; patients[pIndex].lastVisit = new Date().toISOString();
+            localStorage.setItem('DARUSSYIFA_MED_DB', JSON.stringify(patients)); loadPatients();
+
+            const d = new Date();
+            const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+            const fullDate = `${days[d.getDay()]}, ${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`;
+
+            if(type === 'pdf') {
+                const { jsPDF } = window.jspdf; const doc = new jsPDF();
+                doc.setFontSize(18); doc.setTextColor(0, 150, 150); doc.text("DARUSSYIFA MEDIKA - MEDICAL RECORD", 20, 20);
+                doc.setFontSize(11); doc.setTextColor(0, 0, 0); 
+                doc.text(`Hari, Tgl Kunjungan : ${fullDate}`, 20, 30);
+                doc.text(`ID Pasien           : ${patients[pIndex].id}`, 20, 40);
+                doc.text(`Nama                : ${patients[pIndex].nama}`, 20, 48);
+                doc.text(`Usia / Gender       : ${patients[pIndex].usia} Th / ${patients[pIndex].gender}`, 20, 56);
+                doc.text("---------------------------------------------------------", 20, 64);
+                
+                doc.setFont(undefined, 'bold'); doc.text("DIAGNOSIS ALGORITMIK:", 20, 74); doc.setFont(undefined, 'normal'); 
+                const diagLines = doc.splitTextToSize(diagnosis || "-", 170); doc.text(diagLines, 20, 82);
+                
+                let currentY = 82 + (diagLines.length * 7);
+                doc.setFont(undefined, 'bold'); doc.text("RESEP OBAT / TERAPI:", 20, currentY + 10); doc.setFont(undefined, 'normal'); 
+                const medLines = doc.splitTextToSize(prescriptionText || "-", 170); doc.text(medLines, 20, currentY + 18);
+                
+                let finalY = currentY + 18 + (medLines.length * 7) + 10;
+                doc.setFont(undefined, 'italic'); doc.text("Semoga Allah mengangkat penyakitnya dan memberikan kesembuhan yang sempurna.", 20, finalY);
+
+                doc.save(`MedRecord_${patients[pIndex].nama.replace(/\s+/g, '_')}.pdf`); alert("PDF berhasil dicetak & stok gudang otomatis terpotong.");
+            } 
+            else if(type === 'word') {
+                const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'></head><body>";
+                const html = `<h2 style="color:#06b6d4;font-family:sans-serif;text-align:center;">DARUSSYIFA MEDIKA - MEDICAL RECORD</h2><hr>
+                    <table style="width:100%; font-family:Arial; font-size:14px;">
+                        <tr><td width="30%"><b>Hari, Tgl Kunjungan</b></td><td>: ${fullDate}</td></tr>
+                        <tr><td><b>ID Pasien</b></td><td>: ${patients[pIndex].id}</td></tr>
+                        <tr><td><b>Nama</b></td><td>: ${patients[pIndex].nama}</td></tr>
+                    </table><br>
+                    <h3 style="color:#0f172a; font-family:Arial;">DIAGNOSIS ALGORITMIK:</h3><p style="font-family:Arial; font-size:14px;">${diagnosis.replace(/\n/g, '<br>')}</p><br>
+                    <h3 style="color:#0f172a; font-family:Arial;">RESEP OBAT / TERAPI:</h3><p style="font-family:Arial; font-size:14px;">${prescriptionText.replace(/\n/g, '<br>')}</p>
+                    <br><p style="font-family:Arial; font-size:14px; font-style:italic; text-align:center; color:#06b6d4; margin-top:20px;">"Semoga Allah mengangkat penyakitnya dan memberikan kesembuhan yang sempurna."</p>`;
+                const blob = new Blob([header + html + "</body></html>"], { type: 'application/msword' });
+                const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `MedRecord_${patients[pIndex].nama}.doc`;
+                document.body.appendChild(a); a.click(); document.body.removeChild(a); alert("Word berhasil dicetak & stok gudang otomatis terpotong.");
+            } 
+            else if(type === 'wa') {
+                let text = `*DARUSSYIFA MEDIKA : MEDICAL RECORD*\n\n*Hari, Tgl Kunjungan:* ${fullDate}\n*ID Pasien:* ${patients[pIndex].id}\n*Nama:* ${patients[pIndex].nama}\n\n*DIAGNOSIS ALGORITMIK:*\n${diagnosis}\n\n*RESEP OBAT / TERAPI:*\n${prescriptionText}\n\n_Semoga Allah mengangkat penyakitnya dan memberikan kesembuhan yang sempurna._`;
+                let num = document.getElementById('wa-number').value.replace(/[^0-9]/g, '');
+                if(num.startsWith('0')) num = '62' + num.substring(1);
+                window.open(num ? `https://wa.me/${num}?text=${encodeURIComponent(text)}` : `https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+            }
+        }
+
+        // --- MEDBOT & SCREENSAVER ---
+        function toggleChatWindow() {
+            const cw = document.getElementById('chatWindow');
+            cw.classList.toggle('hidden'); cw.classList.toggle('flex');
+        }
+
+        function handleChatSubmit(e) {
+            e.preventDefault();
+            const input = document.getElementById("chatInput"); const q = input.value.trim(); if(!q) return;
+            const container = document.getElementById("chatMessages");
+            
+            container.innerHTML += `<div class="bg-cyan-600 text-white p-2 md:p-2.5 rounded-xl font-sans font-bold self-end max-w-[85%] ml-auto text-[11px] md:text-xs shadow-md border border-cyan-400"> ${q} </div>`;
+            
+            setTimeout(() => { processBotLogic(q, container); }, 400);
+            input.value = "";
+        }
+        
+        function showProgrammerInfoBot() {
+            const container = document.getElementById("chatMessages");
+            container.innerHTML += `<div class="bg-cyan-600 text-white p-2 md:p-2.5 rounded-xl font-sans font-bold self-end max-w-[85%] ml-auto text-[11px] md:text-xs shadow-md border border-cyan-400"><i class="fa-solid fa-user-astronaut"></i> Profil Programmer</div>`;
+            
+            let infoHTML = `
+                <span class="text-[10px] md:text-[11px] block font-black mb-2 md:mb-3 border-b pb-1.5 uppercase font-tech tracking-wider text-amber-400 border-amber-500/30"><i class="fa-solid fa-code"></i> IDENTITAS PROGRAMMER</span>
+                <div class="space-y-2.5 md:space-y-3 font-sans text-[9px] md:text-[10px] sm:text-xs">
+                    <div class="flex items-center gap-2"><i class="fa-solid fa-user-gear text-cyan-400 text-sm md:text-base w-4 md:w-5 text-center shrink-0"></i><div><span class="font-bold text-white block">Mohamad Hartadi (Adi)</span><span class="text-[8px] md:text-[9px] text-slate-400 uppercase tracking-widest block">Software Engineer</span></div></div>
+                    <div class="flex items-center gap-2"><i class="fa-brands fa-facebook text-blue-400 text-sm md:text-base w-4 md:w-5 text-center shrink-0"></i><a href="https://www.facebook.com/m.hartadi" target="_blank" class="text-blue-400 font-bold hover:underline truncate">Facebook m.hartadi</a></div>
+                    <div class="flex items-center gap-2"><i class="fa-solid fa-globe text-amber-500 text-sm md:text-base w-4 md:w-5 text-center shrink-0"></i><a href="https://newbieonline7.blogspot.com/" target="_blank" class="text-amber-400 font-bold hover:underline truncate">newbieonline7.blogspot.com</a></div>
+                    <div class="flex items-center gap-2"><i class="fa-brands fa-whatsapp text-emerald-400 text-sm md:text-base w-4 md:w-5 text-center shrink-0"></i><a href="https://wa.me/6282231036047?text=Halo%20Adi,%20saya%20tertarik%20dengan%20DARUSSYIFA%20MEDIKA" target="_blank" class="text-emerald-400 font-bold hover:underline">082231036047</a></div>
+                </div>
+            `;
+            setTimeout(() => { container.innerHTML += `<div class="bg-slate-900/90 p-2.5 md:p-3 rounded-xl border border-amber-500/50 shadow-[0_0_15px_rgba(245,158,11,0.15)] max-w-[95%] md:max-w-[90%] leading-relaxed text-slate-100 text-justify font-mono text-[11px] md:text-xs">${infoHTML}</div>`; container.scrollTop = container.scrollHeight; }, 300);
+        }
+
+        function processBotLogic(query, container) {
+            let clean = query.toLowerCase();
+            let ans = `<span class="text-red-400 font-bold"><i class="fa-solid fa-triangle-exclamation"></i> Perintah tidak dikenali.</span> Coba <b class="text-amber-400">'cari pasien budi'</b>, <b class="text-purple-400">'cari obat amox'</b>, atau <b class="text-pink-400">'jelaskan influenza'</b>.`;
+
+            // Logika Penjelasan Cerdas
+            if(clean.includes("jelaskan") || clean.includes("apa itu") || clean.includes("penjelasan") || clean.includes("tentang")) {
+                let term = clean.replace("penjelasan", "").replace("jelaskan", "").replace("apa itu", "").replace("tentang", "").trim();
+                let mD = drugs.find(d => d.nama.toLowerCase().includes(term) || d.id.toLowerCase().includes(term));
+                let mPk = pakarRules.find(p => p.penyakit.toLowerCase().includes(term) || p.gejala.toLowerCase().includes(term));
+                
+                ans = "";
+                if(mPk) {
+                    ans += `<span class="text-[10px] md:text-[11px] block font-black mb-1.5 border-b pb-1 uppercase font-tech tracking-wider text-emerald-400 border-emerald-500/30"><i class="fa-solid fa-brain"></i> ANALISIS SISTEM PAKAR</span>`;
+                    ans += `<div class="mt-2 font-sans text-[10px] md:text-xs leading-relaxed"><b class="text-emerald-400 text-sm">${mPk.penyakit}</b> adalah sebuah kondisi klinis yang telah dicatat dalam basis data medis V5.0. Penyakit ini biasanya terdeteksi melalui karakteristik gejala utama seperti: <i class="text-amber-300">"${mPk.gejala}"</i>.<br><br><b>Saran Terapi:</b> Modul pakar kami dengan tingkat akurasi <b>${mPk.akurasi}%</b> merekomendasikan penggunaan <span class="text-purple-400 font-bold">${mPk.obat}</span>. Mohon diperhatikan potensi efek sampingnya yaitu ${mPk.efek}.</div>`;
+                }
+                else if(mD) {
+                    ans += `<span class="text-[10px] md:text-[11px] block font-black mb-1.5 border-b pb-1 uppercase font-tech tracking-wider text-purple-400 border-purple-500/30"><i class="fa-solid fa-pills"></i> INFO FARMAKOLOGI</span>`;
+                    ans += `<div class="mt-2 font-sans text-[10px] md:text-xs leading-relaxed"><b class="text-purple-400 text-sm">${mD.nama}</b> (Kode: ${mD.id}) diklasifikasikan sebagai sediaan <b>${mD.kategori}</b> dalam inventory apotek. <br><br>Berdasarkan data operasional kami, saat ini tersisa <b class="${mD.stokSisa < 15 ? 'text-red-400' : 'text-emerald-400'}">${mD.stokSisa} unit</b> dari stok awal ${mD.stokAwal} unit. <br><b>Efek Samping Tercatat:</b> ${mD.efek}</div>`;
+                }
+                if(!ans) ans = `<span class="text-red-400 font-bold"><i class="fa-solid fa-triangle-exclamation"></i> Istilah medis '${term}' belum terdaftar dalam basis pengetahuan internal saya.</span>`;
+            }
+            // Logika Pencarian Biasa
+            else if(clean.includes("cari ") || clean.includes("lihat ")) {
+                let term = clean.replace("cari ", "").replace("lihat ", "").replace("pasien", "").replace("obat", "").replace("pakar", "").trim();
+                let mP = patients.filter(p => p.nama.toLowerCase().includes(term) || p.id.toLowerCase().includes(term));
+                let mD = drugs.filter(d => d.nama.toLowerCase().includes(term) || d.id.toLowerCase().includes(term));
+                let mPk = pakarRules.filter(p => p.penyakit.toLowerCase().includes(term) || p.gejala.toLowerCase().includes(term));
+                
+                ans = "";
+                if(mP.length > 0) ans += `<span class="text-[10px] md:text-[11px] block font-black mb-1.5 border-b pb-1 uppercase font-tech tracking-wider text-amber-400 border-amber-500/30"><i class="fa-solid fa-users"></i> PASIEN DITEMUKAN</span>` + mP.map(p => `
+                    <div class="bg-slate-950 p-2 md:p-2.5 rounded border border-amber-500/20 mb-2 mt-2 font-sans text-[10px] md:text-xs">
+                        <p class="font-black text-amber-400">${p.id} - ${p.nama}</p>
+                        <p class="text-slate-300 mt-1 border-l-2 border-slate-500 pl-1.5"><i class="fa-solid fa-clock-rotate-left mr-1"></i> Terakhir: <b>${p.lastVisit ? new Date(p.lastVisit).toLocaleDateString() : 'Belum Pernah'}</b></p>
+                        <p class="text-slate-300 mt-1 border-l-2 border-slate-500 pl-1.5 line-clamp-2">Keluhan: ${p.keluhan || '-'}</p>
+                    </div>`).join('');
+                
+                if(mD.length > 0) ans += (ans ? "<br>" : "") + `<span class="text-[10px] md:text-[11px] block font-black mb-1.5 border-b pb-1 uppercase font-tech tracking-wider text-purple-400 border-purple-500/30"><i class="fa-solid fa-pills"></i> OBAT DITEMUKAN</span>` + mD.map(d => `<div class="bg-slate-950 p-2 rounded border border-purple-500/20 mb-1 font-sans text-[10px] md:text-xs"><b>${d.nama}</b> [Sisa: <span class="${d.stokSisa < 15 ? 'text-red-400':'text-emerald-400'}">${d.stokSisa}</span>]</div>`).join('');
+                
+                if(mPk.length > 0) ans += (ans ? "<br>" : "") + `<span class="text-[10px] md:text-[11px] block font-black mb-1.5 border-b pb-1 uppercase font-tech tracking-wider text-pink-400 border-pink-500/30"><i class="fa-solid fa-brain"></i> PAKAR DITEMUKAN</span>` + mPk.map(p => `<div class="bg-slate-950 p-2 rounded border border-pink-500/20 mb-1 font-sans text-[10px] md:text-xs"><b>${p.penyakit}</b><br><span class="text-slate-400">Terapi: ${p.obat}</span></div>`).join('');
+                
+                if(!ans) ans = `<span class="text-red-400 font-bold"><i class="fa-solid fa-triangle-exclamation"></i> Kata kunci '${term}' tidak ditemukan.</span>`;
+            }
+
+            container.innerHTML += `<div class="bg-slate-900/90 p-2.5 md:p-3 rounded-xl border border-slate-700 max-w-[95%] md:max-w-[85%] leading-relaxed text-slate-100 text-justify font-mono text-[11px] md:text-xs shadow-md">${ans}</div>`;
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function setupScreensaverWatchdog() {
+            const interrupt = () => {
+                systemIdleTimeSeconds = 0;
+                if(isScreensaverActive) {
+                    isScreensaverActive = false;
+                    const scNode = document.getElementById("monsoonTechScreensaver");
+                    scNode.classList.remove("opacity-100"); scNode.classList.add("opacity-0");
+                    setTimeout(() => scNode.classList.add("hidden"), 700);
+                }
+            };
+            window.onmousemove = interrupt; window.onkeypress = interrupt; window.ontouchstart = interrupt;
+            setInterval(() => {
+                systemIdleTimeSeconds++;
+                if(systemIdleTimeSeconds >= 300 && !isScreensaverActive) triggerScreensaverManual();
+            }, 1000);
+        }
+
+        function triggerScreensaverManual() {
+            isScreensaverActive = true;
+            const scNode = document.getElementById("monsoonTechScreensaver");
+            scNode.classList.remove("hidden");
+            setTimeout(() => { scNode.classList.remove("opacity-0"); scNode.classList.add("opacity-100"); }, 50);
+        }
+
+        const panel = document.getElementById("draggablePanel");
+        const handle = document.getElementById("dragHandle");
+        let isDragging = false, startX, startY, initX, initY;
+        if (handle && panel) {
+            handle.addEventListener("mousedown", (e) => {
+                if(e.target.closest('button')) return; 
+                isDragging = true; startX = e.clientX || e.touches[0].clientX; startY = e.clientY || e.touches[0].clientY;
+                initX = panel.offsetLeft; initY = panel.offsetTop; 
+                if(!e.touches) e.preventDefault();
+            });
+            const moveHandler = (e) => {
+                if (!isDragging) return;
+                let currentX = e.clientX || (e.touches && e.touches[0].clientX);
+                let currentY = e.clientY || (e.touches && e.touches[0].clientY);
+                panel.style.left = (initX + (currentX - startX)) + "px"; panel.style.top = (initY + (currentY - startY)) + "px";
+                panel.style.right = "auto"; panel.style.bottom = "auto"; panel.style.transform = "none";
+            };
+            document.addEventListener("mousemove", moveHandler); document.addEventListener("touchmove", moveHandler, {passive: false});
+            const upHandler = () => { isDragging = false; };
+            document.addEventListener("mouseup", upHandler); document.addEventListener("touchend", upHandler);
+        }
+
+        function openCreatorModal() { document.getElementById('creatorModal').classList.remove('hidden'); }
+        function closeCreatorModal() { document.getElementById('creatorModal').classList.add('hidden'); }
+    </script>
+</body>
+</html>
