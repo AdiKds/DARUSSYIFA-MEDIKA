@@ -89,6 +89,17 @@
         body { top: 0px !important; position: static !important; }
         .skiptranslate iframe { display: none !important; }
         ::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
+        
+        /* Custom Scroll Chat */
+        .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #020617; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #06b6d4; border-radius: 3px; }
+        
+        /* Audio visualizer glow TTS */
+        .audio-speaking {
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.8), 0 0 30px rgba(6, 182, 212, 0.4);
+            border-color: #00ffff !important;
+        }
     </style>
 </head>
 <body id="appBody" class="theme-dark bg-[var(--bg-main)] text-[var(--text-main)] p-2 md:p-4 lg:p-6 min-h-screen flex flex-col justify-between overflow-x-hidden relative pb-24">
@@ -217,6 +228,10 @@
                     <i id="themeIcon" class="fa-solid fa-moon text-sm"></i> <span id="themeText" class="hidden sm:inline">DARK</span>
                 </button>
                 
+                <button type="button" onclick="openVoiceSettingsModal()" class="bg-slate-950 border-2 border-[var(--border-color)] text-[10px] md:text-[11px] font-mono font-black px-2 md:px-3 rounded-xl text-purple-400 hover:border-purple-400 flex items-center justify-center gap-1.5 shadow-md flex-1 md:flex-none h-full custom-holo-trigger transition-colors" data-holo="SIRI TTS Voice: Buka pengaturan tema suara Asisten AI.">
+                    <i class="fa-solid fa-headset text-sm"></i> <span class="hidden lg:inline">VOICE</span>
+                </button>
+                
                 <button type="button" onclick="openCreatorModal()" class="bg-slate-800 hover:bg-slate-700 text-white text-[10px] md:text-[11px] font-mono font-black px-2 md:px-3 rounded-xl border-2 border-[var(--border-color)] transition-colors flex items-center justify-center gap-1.5 flex-1 md:flex-none shadow-md h-full custom-holo-trigger" data-holo="Identitas Pengembang: Menampilkan profil Mohamad Hartadi, tautan blog, dan kontak WhatsApp.">
                     <i class="fa-solid fa-user-gear text-cyan-400 text-sm"></i> <span class="hidden sm:inline">CREATOR</span>
                 </button>
@@ -322,6 +337,7 @@
                     </div>
                 </div>
 
+                <!-- Modul Manajemen Pasien -->
                 <div id="tab-pasien" class="tab-content hidden-ui flex flex-col h-full">
                     <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center border-b border-amber-500/50 pb-2 md:pb-3 mb-3 md:mb-4 gap-3">
                         <h2 class="text-base md:text-xl font-tech font-black uppercase text-amber-500 shrink-0"><i class="fa-solid fa-users mr-2"></i> Manajemen Pasien</h2>
@@ -357,6 +373,7 @@
                     </div>
                 </div>
 
+                <!-- Modul Apotek -->
                 <div id="tab-apotek" class="tab-content hidden-ui flex flex-col h-full">
                     <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center border-b border-purple-500/50 pb-2 md:pb-3 mb-3 md:mb-4 gap-3">
                         <h2 class="text-base md:text-xl font-tech font-black uppercase text-purple-400 shrink-0"><i class="fa-solid fa-pills mr-2"></i> Inventory Farmasi</h2>
@@ -394,6 +411,7 @@
                     </div>
                 </div>
 
+                <!-- Modul Sistem Pakar -->
                 <div id="tab-pakar" class="tab-content hidden-ui flex flex-col h-full">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-pink-500/50 pb-2 md:pb-3 mb-3 md:mb-4 gap-3">
                         <h2 class="text-base md:text-xl font-tech font-black uppercase text-pink-500 shrink-0"><i class="fa-solid fa-brain mr-2"></i> Sistem Pakar</h2>
@@ -433,6 +451,7 @@
                     </div>
                 </div>
 
+                <!-- Modul Diagnosis & Ekspor -->
                 <div id="tab-diagnosis" class="tab-content hidden-ui flex flex-col h-full">
                     <div class="flex items-center gap-2 border-b border-emerald-500/50 pb-2 md:pb-3 mb-3 md:mb-4">
                         <h2 class="text-base md:text-xl font-tech font-black uppercase text-emerald-400"><i class="fa-solid fa-file-prescription mr-2"></i> Diagnosis & Sinkronisasi Resep</h2>
@@ -496,6 +515,7 @@
         </div>
     </div>
 
+    <!-- Interface Asisten Digital & Chatbot -->
     <div class="fixed bottom-4 right-4 md:bottom-5 md:right-5 z-[900] flex flex-row items-center gap-2 pointer-events-none font-mono">
         
         <div id="chatWindow" class="absolute bottom-14 md:bottom-16 right-0 w-[calc(100vw-2rem)] max-w-[380px] sm:w-[400px] h-[65vh] md:h-[70vh] max-h-[550px] bg-slate-900 border-2 border-cyan-500 rounded-2xl flex-col hidden overflow-hidden shadow-[0_0_30px_rgba(6,182,212,0.3)] pointer-events-auto">
@@ -506,10 +526,15 @@
                         <i class="fa-solid fa-robot text-cyan-400 text-xl md:text-3xl animate-pulse"></i>
                         <div>
                             <h4 class="font-tech text-[10px] md:text-sm font-black text-cyan-400 tracking-wide">MEDBOT TERMINAL</h4>
-                            <span class="text-[8px] md:text-[10px] font-mono text-emerald-400 block font-black">● COGNITIVE SEARCH ENGINE V5.0</span>
+                            <span class="text-[8px] md:text-[10px] font-mono text-emerald-400 block font-black">● COGNITIVE SEARCH & TTS V5.0</span>
                         </div>
                     </div>
-                    <button onclick="toggleChatWindow()" class="text-slate-400 hover:text-red-400 px-2 py-0.5 cursor-pointer font-black text-xl md:text-2xl leading-none">&minus;</button>
+                    <div class="flex gap-2">
+                        <button onclick="openVoiceSettingsModal()" class="text-cyan-400 hover:text-white bg-slate-800 border border-cyan-700/50 p-1.5 md:p-2 rounded-lg cursor-pointer transition-all hover:bg-slate-700" title="Ubah Gaya Suara (TTS)">
+                            <i class="fa-solid fa-headphones"></i>
+                        </button>
+                        <button onclick="toggleChatWindow()" class="text-slate-400 hover:text-red-400 px-2 py-0.5 cursor-pointer font-black text-xl md:text-2xl leading-none">&minus;</button>
+                    </div>
                 </div>
                 
                 <div class="flex justify-between items-center mt-2 border-t border-slate-800/80 pt-2 pb-1">
@@ -521,22 +546,29 @@
                 </div>
             </div>
             
-            <div id="chatMessages" class="flex-1 p-3 overflow-y-auto space-y-3 font-mono text-xs sm:text-sm text-white bg-slate-950">
+            <div id="chatMessages" class="flex-1 p-3 overflow-y-auto space-y-3 font-mono text-xs sm:text-sm text-white bg-slate-950 custom-scroll">
                 <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-700 max-w-[90%] md:max-w-[85%] leading-relaxed text-justify shadow-md">
                     <span class="text-cyan-400 text-[10px] md:text-xs block font-black mb-1"><i class="fa-solid fa-terminal"></i> ASSISTANT ONLINE:</span>
-                    Halo! Saya **MedBot V5.0**. Ketik perintah seperti <b class="text-amber-400">"cari pasien [nama]"</b>, <b class="text-purple-400">"cari obat [nama]"</b>, atau <b class="text-pink-400">"jelaskan [nama penyakit/obat]"</b> untuk mendapatkan deskripsi cerdas dari sistem pakar.
+                    Halo! Saya **MedBot V5.0**. Ketik perintah seperti <b class="text-amber-400">"cari pasien [nama]"</b>, <b class="text-purple-400">"cari obat [nama]"</b>, atau <b class="text-pink-400">"jelaskan [nama penyakit/obat]"</b> untuk mendapatkan deskripsi cerdas.<br><br>Untuk pertanyaan di luar topik medis, saya akan menggunakan <span class="text-blue-400">Google</span> dan <span class="text-white">Wikipedia</span>.
                 </div>
             </div>
 
-            <div class="bg-slate-900 px-3 py-2.5 flex gap-2 border-t border-slate-800 overflow-x-auto shrink-0 hide-scrollbar shadow-inner">
-                <button type="button" onclick="showProgrammerInfoBot()" class="bg-slate-950 border border-amber-500/50 text-amber-400 text-[10px] md:text-xs px-3 py-1.5 rounded-full font-bold hover:bg-amber-500/20 whitespace-nowrap transition-all shadow-sm flex items-center gap-1.5">
-                    <i class="fa-solid fa-user-astronaut"></i> Profil Programmer
+            <!-- Area Chatbot Shortcuts -->
+            <div class="bg-slate-900 px-3 py-2.5 flex gap-2 border-t border-slate-800 overflow-x-auto shrink-0 custom-scroll shadow-inner">
+                <button type="button" onclick="triggerChatShortcut('fitur_aplikasi')" class="bg-slate-950 border border-emerald-500/50 text-emerald-400 text-[10px] md:text-xs px-3 py-1.5 rounded-full font-bold hover:bg-emerald-500/20 whitespace-nowrap transition-all shadow-sm flex items-center gap-1.5 cursor-pointer">
+                    <i class="fa-solid fa-list"></i> Fitur Aplikasi
+                </button>
+                <button type="button" onclick="triggerChatShortcut('my_aplikasi')" class="bg-slate-950 border border-amber-500/50 text-amber-400 text-[10px] md:text-xs px-3 py-1.5 rounded-full font-bold hover:bg-amber-500/20 whitespace-nowrap transition-all shadow-sm flex items-center gap-1.5 cursor-pointer">
+                    <i class="fa-solid fa-layer-group"></i> My Aplikasi
+                </button>
+                <button type="button" onclick="triggerChatShortcut('programmer')" class="bg-slate-950 border border-fuchsia-500/50 text-fuchsia-400 text-[10px] md:text-xs px-3 py-1.5 rounded-full font-bold hover:bg-fuchsia-500/20 whitespace-nowrap transition-all shadow-sm flex items-center gap-1.5 cursor-pointer">
+                    <i class="fa-solid fa-code"></i> Data Programmer
                 </button>
             </div>
 
             <form class="p-2.5 bg-slate-900 border-t border-slate-800 flex gap-2 shrink-0" onsubmit="handleChatSubmit(event)">
-                <input type="text" id="chatInput" autocomplete="off" placeholder="Ketik perintah..." class="flex-1 w-0 bg-slate-950 border-2 border-slate-700 rounded-xl px-3 py-2 text-xs md:text-sm text-white focus:outline-none focus:border-cyan-400 font-bold">
-                <button type="submit" class="bg-cyan-600 hover:bg-cyan-500 text-white px-4 py-2 rounded-xl font-black cursor-pointer flex items-center justify-center shrink-0"><i class="fa-solid fa-paper-plane text-sm"></i></button>
+                <input type="text" id="chatInput" autocomplete="off" placeholder="Ketik perintah atau tanya apapun..." class="flex-1 w-0 bg-slate-950 border-2 border-slate-700 rounded-xl px-3 py-2 text-xs md:text-sm text-white focus:outline-none focus:border-cyan-400 font-bold transition-colors">
+                <button type="submit" class="bg-cyan-600 hover:bg-cyan-500 text-white px-4 py-2 rounded-xl font-black cursor-pointer flex items-center justify-center shrink-0 transition-colors shadow-md"><i class="fa-solid fa-paper-plane text-sm"></i></button>
             </form>
         </div>
 
@@ -545,12 +577,31 @@
                 <i class="fa-solid fa-desktop text-sm md:text-lg"></i>
             </button>
             <button onclick="toggleChatWindow()" class="h-12 w-12 md:h-14 md:w-14 rounded-full bg-gradient-to-r from-cyan-600 to-cyan-400 border-2 border-white flex items-center justify-center text-slate-950 shadow-[0_0_20px_rgba(6,182,212,0.8)] cursor-pointer hover:scale-105 transition-transform relative custom-holo-trigger" data-holo="Buka Asisten Digital MedBot (Pencarian & Penjelasan Cerdas).">
-                <i class="fa-solid fa-comments text-xl md:text-2xl"></i>
+                <i id="botToggleIcon" class="fa-solid fa-comments text-xl md:text-2xl"></i>
                 <span class="absolute top-0 right-0 h-3 w-3 md:h-3.5 md:w-3.5 bg-emerald-400 rounded-full border-2 border-white animate-ping"></span>
             </button>
         </div>
     </div>
 
+    <!-- Voice Settings Modal (TTS) -->
+    <div id="voiceSettingsModal" class="fixed inset-0 z-[10005] hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-slate-900 border-2 border-cyan-500 rounded-2xl w-full max-w-sm p-6 shadow-[0_0_30px_rgba(6,182,212,0.5)] relative flex flex-col font-sans">
+            <button onclick="closeVoiceSettingsModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors cursor-pointer z-10"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <h3 class="text-cyan-400 text-base sm:text-lg font-black font-tech mb-2 flex items-center gap-2 mt-2 sm:mt-0 tracking-widest uppercase"><i class="fa-solid fa-headset text-yellow-400"></i> Suara Asisten AI</h3>
+            <p class="text-xs text-slate-400 mb-4 font-mono">Pilih gaya suara pembaca otomatis (SIRI TTS) yang tersedia secara bawaan di perangkat ini.</p>
+            
+            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 mb-6">
+                <label class="block text-slate-300 font-mono text-[11px] sm:text-sm font-bold mb-2 uppercase">Daftar Suara:</label>
+                <select id="voiceSelect" onchange="changeBotVoice()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-cyan-400 custom-scroll font-medium">
+                    <option value="">Memuat daftar suara sistem...</option>
+                </select>
+            </div>
+            
+            <button onclick="closeVoiceSettingsModal()" class="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-black tracking-widest py-3 text-sm rounded-xl transition-colors shadow-lg cursor-pointer uppercase font-tech">Simpan Gaya Suara</button>
+        </div>
+    </div>
+
+    <!-- Creator Modal Asli -->
     <div id="creatorModal" class="fixed inset-0 z-[1100] hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 select-none">
         <div id="draggablePanel" class="bg-slate-900 border-2 border-cyan-500 rounded-2xl w-full max-w-md p-5 absolute shadow-[0_0_50px_rgba(6,182,212,0.6)]">
             <div id="dragHandle" class="drag-handle text-center pb-3 mb-4 border-b border-slate-800 flex flex-col items-center justify-center relative cursor-move">
@@ -598,6 +649,99 @@
     </div>
 
     <script>
+        // --- DATA APLIKASI PORTOFOLIO ---
+        const myAppsDir = [
+            {u:"https://adikds.github.io/jarvis-ai/",i:"fa-robot",n:"JARVIS AI"},
+            {u:"https://adikds.github.io/edu-market-pro/",i:"fa-graduation-cap",n:"EduMarket Pro"},
+            {u:"https://adikds.github.io/iptv-terminal/",i:"fa-tv",n:"IPTV Terminal"},
+            {u:"https://adikds.github.io/Al-Quran-Karim/",i:"fa-book-quran",n:"Al-Quran Karim"},
+            {u:"https://adikds.github.io/-MEGA-ATLAS-FKG/",i:"fa-tooth",n:"Mega Atlas FKG"},
+            {u:"https://adikds.github.io/SISTEM-MONITORING-SEISMIK-PERINGATAN-TSUNAMI/",i:"fa-wave-square",n:"Tsunami Alert"},
+            {u:"https://adikds.github.io/INTEGRATED-DAM-ANALYTICS-ASSESSMENT-SYSTEM/",i:"fa-water",n:"Dam Analytics"},
+            {u:"https://adikds.github.io/WAY-APU-DAM/",i:"fa-building-shield",n:"Way Apu Dam"},
+            {u:"https://adikds.github.io/GeoStructPro-15-Essential-Geotechnical-Formulas/",i:"fa-mountain",n:"GeoStructPro 15"},
+            {u:"https://adikds.github.io/GEOSTRUCT-PRO-20-FORMULA-GEOTECHNICAL/",i:"fa-layer-group",n:"GeoStruct Pro 20"},
+            {u:"https://adikds.github.io/UNIFIED-SOIL-CLASSIFICATION-SYSTEM/",i:"fa-cubes",n:"USCS Soil"},
+            {u:"https://adikds.github.io/AERORADAR-PRO/",i:"fa-plane",n:"AeroRadar Pro"},
+            {u:"https://adikds.github.io/HYDRACANAL-PRO-GEOMETRIC-DESIGN/",i:"fa-water-ladder",n:"HydraCanal Pro"},
+            {u:"https://adikds.github.io/financial-planner/",i:"fa-chart-line",n:"Financial Planner"},
+            {u:"https://adikds.github.io/business-suite/",i:"fa-chart-bar",n:"Business Suite"},
+            {u:"https://adikds.github.io/stock-manager/",i:"fa-boxes-stacked",n:"Stock Manager"},
+            {u:"https://adikds.github.io/Aplikasi_Point_of_Sale_-POS-_atau_sistem_kasir/",i:"fa-cash-register",n:"POS Terminal Pro"},
+            {u:"https://adikds.github.io/KEUANGANKU/",i:"fa-wallet",n:"Keuanganku"},
+            {u:"https://adikds.github.io/DARUSSYIFA-MEDIKA/",i: "fa-hospital",n:"DARUSSYIFA"},
+            {u:"https://adikds.github.io/SKIN_SYIFA_AI/",i: "fa-magnifying-glass-chart",n:"SKIN SYIFA"},
+            {u:"https://adikds.github.io/NEURO-PSYCH_AI/",i: "fa-brain",n:"NEURO-PSYCH"},
+            {u:"https://adikds.github.io/SMILE-SYIFA-AI/",i: "fa-face-smile",n:"SMILE SYIFA"},
+            {u:"https://adikds.github.io/DOKTER-AI/",i: "fa-user-doctor",n:"DOKTER AI"},
+            {u: "https://www.f15library.com/", i: "fa-book-open-reader",n: "F15 Library"},
+            {u: "https://adikds.github.io/ATLAS-GEOTEKNIK/", i: "fa-earth-americas",n: "Geotechnical"},
+            {u: "https://adikds.github.io/STATISTICS_for_ENGINEERS-/", i: "fa-chart-pie",n: "Stats Engineers"},
+            {u: "https://famelack.com/radio/id", i: "fa-radio", n: "Radio Online"},
+            {u: "https://famelack.com/tv/id", i: "fa-tv",n: "TV Famelack"},
+            {u: "https://adikds.github.io/Mega-Atlas-Kedokteran-Neurologi-Bedah-Syaraf/", i: "fa-brain",n: "Neurology"},
+            {u: "https://adikds.github.io/Adi_Newbie/", i: "fa-user-astronaut",n: "Adi Newbie"}
+        ];
+
+        // --- SISTEM TEXT-TO-SPEECH (SIRI TTS) ---
+        const synth = window.speechSynthesis;
+        let botVoice = null;
+        let availableVoices = [];
+
+        function loadVoices() {
+            availableVoices = synth.getVoices();
+            if(availableVoices.length === 0) return;
+            
+            const voiceSelect = document.getElementById('voiceSelect');
+            if(voiceSelect) {
+                voiceSelect.innerHTML = '';
+                availableVoices.forEach((v, i) => {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = `${v.name} (${v.lang})`;
+                    voiceSelect.appendChild(option);
+                });
+            }
+
+            const savedVoiceIndex = localStorage.getItem('darussyifaBotVoiceIndex');
+            if(savedVoiceIndex !== null && availableVoices[savedVoiceIndex]) {
+                botVoice = availableVoices[savedVoiceIndex];
+                if(voiceSelect) voiceSelect.value = savedVoiceIndex;
+            } else {
+                botVoice = availableVoices.find(v => (v.name.includes('Indonesian') || v.name.includes('ID') || v.name.includes('Female'))) || availableVoices[0];
+                if(voiceSelect) voiceSelect.value = availableVoices.indexOf(botVoice);
+            }
+        }
+        
+        if (synth.onvoiceschanged !== undefined) { synth.onvoiceschanged = loadVoices; }
+        
+        function changeBotVoice() {
+            const voiceSelect = document.getElementById('voiceSelect');
+            const selectedIndex = voiceSelect.value;
+            botVoice = availableVoices[selectedIndex];
+            localStorage.setItem('darussyifaBotVoiceIndex', selectedIndex);
+            speakBot("Gaya tema suara telah berhasil diubah dan siap digunakan.");
+        }
+
+        function openVoiceSettingsModal() { document.getElementById('voiceSettingsModal').classList.remove('hidden'); }
+        function closeVoiceSettingsModal() { document.getElementById('voiceSettingsModal').classList.add('hidden'); }
+
+        function speakBot(text) {
+            if (!synth) return;
+            synth.cancel(); 
+            const cleanText = text.replace(/\*/g, '').replace(/_/g, '').replace(/<[^>]*>?/gm, '');
+            const utterance = new SpeechSynthesisUtterance(cleanText);
+            if (botVoice) utterance.voice = botVoice;
+            utterance.rate = 1.0;
+            utterance.pitch = 1.0;
+            
+            const robotIcon = document.getElementById('botToggleIcon');
+            utterance.onstart = () => { if(robotIcon) robotIcon.classList.add('audio-speaking', 'text-cyan-400'); };
+            utterance.onend = () => { if(robotIcon) robotIcon.classList.remove('audio-speaking', 'text-cyan-400'); };
+            
+            synth.speak(utterance);
+        }
+
         // --- DATABASE DEFAULT KOMPREHENSIF ---
         let patients = JSON.parse(localStorage.getItem('DARUSSYIFA_MED_DB')) || [];
         
@@ -627,6 +771,7 @@
             renderObat();
             renderPakar();
             populateDiagnosisSelects();
+            setTimeout(loadVoices, 500);
             
             setTimeout(() => {
                 const loader = document.getElementById('startupLoader');
@@ -1052,38 +1197,122 @@
         function toggleChatWindow() {
             const cw = document.getElementById('chatWindow');
             cw.classList.toggle('hidden'); cw.classList.toggle('flex');
+            if (!cw.classList.contains('hidden') && botVoice) {
+                speakBot("Terminal Med Bot Siap Melayani Anda.");
+            }
         }
 
-        function handleChatSubmit(e) {
+        async function handleChatSubmit(e) {
             e.preventDefault();
             const input = document.getElementById("chatInput"); const q = input.value.trim(); if(!q) return;
             const container = document.getElementById("chatMessages");
             
             container.innerHTML += `<div class="bg-cyan-600 text-white p-2 md:p-2.5 rounded-xl font-sans font-bold self-end max-w-[85%] ml-auto text-[11px] md:text-xs shadow-md border border-cyan-400"> ${q} </div>`;
-            
-            setTimeout(() => { processBotLogic(q, container); }, 400);
+            container.scrollTop = container.scrollHeight;
             input.value = "";
+            
+            await processBotLogic(q, container);
         }
         
-        function showProgrammerInfoBot() {
-            const container = document.getElementById("chatMessages");
-            container.innerHTML += `<div class="bg-cyan-600 text-white p-2 md:p-2.5 rounded-xl font-sans font-bold self-end max-w-[85%] ml-auto text-[11px] md:text-xs shadow-md border border-cyan-400"><i class="fa-solid fa-user-astronaut"></i> Profil Programmer</div>`;
+        function triggerChatShortcut(action) {
+            const container = document.getElementById('chatMessages');
+            let botReply = "";
+            let ttsOutput = "";
+
+            if (action === 'fitur_aplikasi') {
+                botReply = `
+                    <div class="mb-2 text-emerald-400 font-bold uppercase tracking-wider text-[11px] border-b border-emerald-900/50 pb-1 flex items-center gap-2">
+                        <i class="fa-solid fa-list"></i> Fitur Aplikasi Darussyifa Medika
+                    </div>
+                    <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-3 text-[11px] leading-relaxed text-slate-300 font-sans mt-2 shadow-inner">
+                        <p class="mb-2"><strong>Darussyifa Medika v5.0</strong> adalah sistem Workspace Klinik Terpadu dengan fitur canggih:</p>
+                        <ul class="space-y-2 mb-2 ml-1 text-[10px] md:text-[11px]">
+                            <li><i class="fa-solid fa-users text-amber-500 mr-1.5"></i> <strong>Manajemen Pasien:</strong> CRUD data, riwayat pemeriksaan lengkap terpusat.</li>
+                            <li><i class="fa-solid fa-pills text-purple-400 mr-1.5"></i> <strong>Apotek Inventory:</strong> Lacak stok real-time, impor data Excel/CSV.</li>
+                            <li><i class="fa-solid fa-brain text-pink-400 mr-1.5"></i> <strong>Sistem Pakar AI:</strong> Rekomendasi otomatis resep obat berdasarkan gejala.</li>
+                            <li><i class="fa-solid fa-file-medical text-emerald-500 mr-1.5"></i> <strong>Cetak Medis Otomatis:</strong> Ekspor ke PDF/Word & langsung kirim via WhatsApp, sekaligus <b>otomatis potong stok gudang obat</b>!</li>
+                            <li><i class="fa-solid fa-database text-blue-500 mr-1.5"></i> <strong>Master Database Hub:</strong> Backup (Ekspor JSON) & Restore (Impor) keseluruhan sistem dengan satu klik.</li>
+                        </ul>
+                    </div>
+                `;
+                ttsOutput = "Aplikasi Darussyifa Medika versi 5 dirancang sebagai Workspace Klinik Terpadu. Menampilkan fitur manajemen pasien, inventory gudang apotek, sistem pakar pemberi rekomendasi, pencetakan medis pintar, serta backup dan restore database menyeluruh.";
             
-            let infoHTML = `
-                <span class="text-[10px] md:text-[11px] block font-black mb-2 md:mb-3 border-b pb-1.5 uppercase font-tech tracking-wider text-amber-400 border-amber-500/30"><i class="fa-solid fa-code"></i> IDENTITAS PROGRAMMER</span>
-                <div class="space-y-2.5 md:space-y-3 font-sans text-[9px] md:text-[10px] sm:text-xs">
-                    <div class="flex items-center gap-2"><i class="fa-solid fa-user-gear text-cyan-400 text-sm md:text-base w-4 md:w-5 text-center shrink-0"></i><div><span class="font-bold text-white block">Mohamad Hartadi (Adi)</span><span class="text-[8px] md:text-[9px] text-slate-400 uppercase tracking-widest block">Software Engineer</span></div></div>
-                    <div class="flex items-center gap-2"><i class="fa-brands fa-facebook text-blue-400 text-sm md:text-base w-4 md:w-5 text-center shrink-0"></i><a href="https://www.facebook.com/m.hartadi" target="_blank" class="text-blue-400 font-bold hover:underline truncate">Facebook m.hartadi</a></div>
-                    <div class="flex items-center gap-2"><i class="fa-solid fa-globe text-amber-500 text-sm md:text-base w-4 md:w-5 text-center shrink-0"></i><a href="https://newbieonline7.blogspot.com/" target="_blank" class="text-amber-400 font-bold hover:underline truncate">newbieonline7.blogspot.com</a></div>
-                    <div class="flex items-center gap-2"><i class="fa-brands fa-whatsapp text-emerald-400 text-sm md:text-base w-4 md:w-5 text-center shrink-0"></i><a href="https://wa.me/6282231036047?text=Halo%20Adi,%20saya%20tertarik%20dengan%20DARUSSYIFA%20MEDIKA" target="_blank" class="text-emerald-400 font-bold hover:underline">082231036047</a></div>
-                </div>
-            `;
-            setTimeout(() => { container.innerHTML += `<div class="bg-slate-900/90 p-2.5 md:p-3 rounded-xl border border-amber-500/50 shadow-[0_0_15px_rgba(245,158,11,0.15)] max-w-[95%] md:max-w-[90%] leading-relaxed text-slate-100 text-justify font-mono text-[11px] md:text-xs">${infoHTML}</div>`; container.scrollTop = container.scrollHeight; }, 300);
+            } else if (action === 'my_aplikasi') {
+                let appsHtml = '<div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2 max-h-[300px] overflow-y-auto custom-scroll pr-2 font-sans">';
+                const styles = [
+                    { iconBg: 'bg-cyan-950/50', iconText: 'text-cyan-400', hoverBorder: 'hover:border-cyan-500' },
+                    { iconBg: 'bg-emerald-950/50', iconText: 'text-emerald-400', hoverBorder: 'hover:border-emerald-500' },
+                    { iconBg: 'bg-amber-950/50', iconText: 'text-amber-400', hoverBorder: 'hover:border-amber-500' },
+                    { iconBg: 'bg-fuchsia-950/50', iconText: 'text-fuchsia-400', hoverBorder: 'hover:border-fuchsia-500' },
+                    { iconBg: 'bg-blue-950/50', iconText: 'text-blue-400', hoverBorder: 'hover:border-blue-500' },
+                    { iconBg: 'bg-rose-950/50', iconText: 'text-rose-400', hoverBorder: 'hover:border-rose-500' },
+                    { iconBg: 'bg-purple-950/50', iconText: 'text-purple-400', hoverBorder: 'hover:border-purple-500' }
+                ];
+
+                myAppsDir.forEach((app, index) => {
+                    const s = styles[index % styles.length];
+                    appsHtml += `
+                        <a href="${app.u}" target="_blank" class="group flex items-center gap-3 p-2.5 bg-slate-900 border border-slate-700 ${s.hoverBorder} rounded-xl transition-all text-slate-200 hover:text-white no-underline shadow-sm hover:shadow-md bg-opacity-80 hover:bg-opacity-100">
+                            <div class="w-8 h-8 rounded-lg ${s.iconBg} flex items-center justify-center ${s.iconText} group-hover:scale-110 transition-transform shrink-0"><i class="fa-solid ${app.i} text-sm"></i></div>
+                            <div class="flex flex-col min-w-0">
+                                <span class="text-[10px] sm:text-[11px] font-bold leading-tight mb-0.5 truncate w-full">${app.n}</span>
+                                <span class="text-[8px] sm:text-[9px] text-slate-400 leading-tight truncate w-full">Buka Aplikasi <i class="fa-solid fa-arrow-up-right-from-square ml-0.5 text-[8px]"></i></span>
+                            </div>
+                        </a>
+                    `;
+                });
+                appsHtml += '</div>';
+
+                botReply = `
+                    <div class="mb-2 text-cyan-400 font-bold uppercase tracking-wider text-[11px] border-b border-cyan-900/50 pb-1 flex items-center gap-2">
+                        <i class="fa-solid fa-layer-group"></i> Direktori My Aplikasi
+                    </div>
+                    <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-3 shadow-inner">
+                        <p class="text-[10px] md:text-[11px] text-slate-300 font-sans mb-1">Daftar lengkap ekosistem aplikasi yang pernah saya kembangkan. Klik untuk meluncurkan:</p>
+                        ${appsHtml}
+                    </div>
+                `;
+                ttsOutput = "Berikut adalah daftar seluruh aplikasi hasil pengembangan yang dapat Anda telusuri.";
+            
+            } else if (action === 'programmer') {
+                botReply = `
+                    <div class="bg-slate-950 border border-fuchsia-500/50 rounded-xl p-3 shadow-lg">
+                        <div class="flex items-center gap-3 mb-3 border-b border-slate-800 pb-2">
+                            <div class="w-10 h-10 rounded-full bg-slate-900 border border-fuchsia-500 flex justify-center items-center text-fuchsia-400 shadow-[0_0_10px_rgba(217,70,239,0.5)]">
+                                <i class="fa-solid fa-user-astronaut"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-black text-white text-xs tracking-widest font-tech uppercase">Mohamad Hartadi</h4>
+                                <span class="text-[9px] text-emerald-400 font-mono tracking-widest">Software Engineer & UI/UX</span>
+                            </div>
+                        </div>
+                        <div class="space-y-2.5 font-mono text-[10px] md:text-[11px] mt-1">
+                            <a href="https://www.facebook.com/m.hartadi" target="_blank" class="flex items-center gap-2 text-slate-300 hover:text-blue-400 transition-colors">
+                                <div class="bg-slate-900 p-1.5 rounded border border-slate-700"><i class="fa-brands fa-facebook w-4 text-center text-blue-500"></i></div>
+                                facebook.com/m.hartadi
+                            </a>
+                            <a href="https://wa.me/6282231036047" target="_blank" class="flex items-center gap-2 text-slate-300 hover:text-emerald-400 transition-colors">
+                                <div class="bg-slate-900 p-1.5 rounded border border-slate-700"><i class="fa-brands fa-whatsapp w-4 text-center text-emerald-500"></i></div>
+                                082231036047
+                            </a>
+                            <a href="https://newbieonline7.blogspot.com/" target="_blank" class="flex items-center gap-2 text-slate-300 hover:text-amber-400 transition-colors">
+                                <div class="bg-slate-900 p-1.5 rounded border border-slate-700"><i class="fa-solid fa-globe w-4 text-center text-amber-500"></i></div>
+                                newbieonline7.blogspot.com
+                            </a>
+                        </div>
+                    </div>
+                `;
+                ttsOutput = "Menampilkan profil informasi kontak pengembang, Bapak Mohamad Hartadi. Silakan hubungi via WhatsApp, kunjungi Facebook, atau baca melalui Blog.";
+            }
+
+            appendBotReply(botReply, ttsOutput, container);
         }
 
-        function processBotLogic(query, container) {
+        async function processBotLogic(query, container) {
             let clean = query.toLowerCase();
-            let ans = `<span class="text-red-400 font-bold"><i class="fa-solid fa-triangle-exclamation"></i> Perintah tidak dikenali.</span> Coba <b class="text-amber-400">'cari pasien budi'</b>, <b class="text-purple-400">'cari obat amox'</b>, atau <b class="text-pink-400">'jelaskan influenza'</b>.`;
+            let ans = "";
+            let ttsOutput = "";
+            let foundInDb = false;
 
             // Logika Penjelasan Cerdas
             if(clean.includes("jelaskan") || clean.includes("apa itu") || clean.includes("penjelasan") || clean.includes("tentang")) {
@@ -1091,16 +1320,18 @@
                 let mD = drugs.find(d => d.nama.toLowerCase().includes(term) || d.id.toLowerCase().includes(term));
                 let mPk = pakarRules.find(p => p.penyakit.toLowerCase().includes(term) || p.gejala.toLowerCase().includes(term));
                 
-                ans = "";
                 if(mPk) {
                     ans += `<span class="text-[10px] md:text-[11px] block font-black mb-1.5 border-b pb-1 uppercase font-tech tracking-wider text-emerald-400 border-emerald-500/30"><i class="fa-solid fa-brain"></i> ANALISIS SISTEM PAKAR</span>`;
                     ans += `<div class="mt-2 font-sans text-[10px] md:text-xs leading-relaxed"><b class="text-emerald-400 text-sm">${mPk.penyakit}</b> adalah sebuah kondisi klinis yang telah dicatat dalam basis data medis V5.0. Penyakit ini biasanya terdeteksi melalui karakteristik gejala utama seperti: <i class="text-amber-300">"${mPk.gejala}"</i>.<br><br><b>Saran Terapi:</b> Modul pakar kami dengan tingkat akurasi <b>${mPk.akurasi}%</b> merekomendasikan penggunaan <span class="text-purple-400 font-bold">${mPk.obat}</span>. Mohon diperhatikan potensi efek sampingnya yaitu ${mPk.efek}.</div>`;
+                    ttsOutput = `Penjelasan dari sistem pakar: Kondisi ${mPk.penyakit} direkomendasikan terapi menggunakan ${mPk.obat}.`;
+                    foundInDb = true;
                 }
                 else if(mD) {
                     ans += `<span class="text-[10px] md:text-[11px] block font-black mb-1.5 border-b pb-1 uppercase font-tech tracking-wider text-purple-400 border-purple-500/30"><i class="fa-solid fa-pills"></i> INFO FARMAKOLOGI</span>`;
                     ans += `<div class="mt-2 font-sans text-[10px] md:text-xs leading-relaxed"><b class="text-purple-400 text-sm">${mD.nama}</b> (Kode: ${mD.id}) diklasifikasikan sebagai sediaan <b>${mD.kategori}</b> dalam inventory apotek. <br><br>Berdasarkan data operasional kami, saat ini tersisa <b class="${mD.stokSisa < 15 ? 'text-red-400' : 'text-emerald-400'}">${mD.stokSisa} unit</b> dari stok awal ${mD.stokAwal} unit. <br><b>Efek Samping Tercatat:</b> ${mD.efek}</div>`;
+                    ttsOutput = `Informasi obat ${mD.nama}, sisa stok saat ini adalah ${mD.stokSisa} unit.`;
+                    foundInDb = true;
                 }
-                if(!ans) ans = `<span class="text-red-400 font-bold"><i class="fa-solid fa-triangle-exclamation"></i> Istilah medis '${term}' belum terdaftar dalam basis pengetahuan internal saya.</span>`;
             }
             // Logika Pencarian Biasa
             else if(clean.includes("cari ") || clean.includes("lihat ")) {
@@ -1109,23 +1340,109 @@
                 let mD = drugs.filter(d => d.nama.toLowerCase().includes(term) || d.id.toLowerCase().includes(term));
                 let mPk = pakarRules.filter(p => p.penyakit.toLowerCase().includes(term) || p.gejala.toLowerCase().includes(term));
                 
-                ans = "";
-                if(mP.length > 0) ans += `<span class="text-[10px] md:text-[11px] block font-black mb-1.5 border-b pb-1 uppercase font-tech tracking-wider text-amber-400 border-amber-500/30"><i class="fa-solid fa-users"></i> PASIEN DITEMUKAN</span>` + mP.map(p => `
-                    <div class="bg-slate-950 p-2 md:p-2.5 rounded border border-amber-500/20 mb-2 mt-2 font-sans text-[10px] md:text-xs">
-                        <p class="font-black text-amber-400">${p.id} - ${p.nama}</p>
-                        <p class="text-slate-300 mt-1 border-l-2 border-slate-500 pl-1.5"><i class="fa-solid fa-clock-rotate-left mr-1"></i> Terakhir: <b>${p.lastVisit ? new Date(p.lastVisit).toLocaleDateString() : 'Belum Pernah'}</b></p>
-                        <p class="text-slate-300 mt-1 border-l-2 border-slate-500 pl-1.5 line-clamp-2">Keluhan: ${p.keluhan || '-'}</p>
-                    </div>`).join('');
+                if(mP.length > 0) {
+                    ans += `<span class="text-[10px] md:text-[11px] block font-black mb-1.5 border-b pb-1 uppercase font-tech tracking-wider text-amber-400 border-amber-500/30"><i class="fa-solid fa-users"></i> PASIEN DITEMUKAN</span>` + mP.map(p => `
+                        <div class="bg-slate-950 p-2 md:p-2.5 rounded border border-amber-500/20 mb-2 mt-2 font-sans text-[10px] md:text-xs">
+                            <p class="font-black text-amber-400">${p.id} - ${p.nama}</p>
+                            <p class="text-slate-300 mt-1 border-l-2 border-slate-500 pl-1.5"><i class="fa-solid fa-clock-rotate-left mr-1"></i> Terakhir: <b>${p.lastVisit ? new Date(p.lastVisit).toLocaleDateString() : 'Belum Pernah'}</b></p>
+                            <p class="text-slate-300 mt-1 border-l-2 border-slate-500 pl-1.5 line-clamp-2">Keluhan: ${p.keluhan || '-'}</p>
+                        </div>`).join('');
+                    foundInDb = true;
+                }
                 
-                if(mD.length > 0) ans += (ans ? "<br>" : "") + `<span class="text-[10px] md:text-[11px] block font-black mb-1.5 border-b pb-1 uppercase font-tech tracking-wider text-purple-400 border-purple-500/30"><i class="fa-solid fa-pills"></i> OBAT DITEMUKAN</span>` + mD.map(d => `<div class="bg-slate-950 p-2 rounded border border-purple-500/20 mb-1 font-sans text-[10px] md:text-xs"><b>${d.nama}</b> [Sisa: <span class="${d.stokSisa < 15 ? 'text-red-400':'text-emerald-400'}">${d.stokSisa}</span>]</div>`).join('');
+                if(mD.length > 0) {
+                    ans += (ans ? "<br>" : "") + `<span class="text-[10px] md:text-[11px] block font-black mb-1.5 border-b pb-1 uppercase font-tech tracking-wider text-purple-400 border-purple-500/30"><i class="fa-solid fa-pills"></i> OBAT DITEMUKAN</span>` + mD.map(d => `<div class="bg-slate-950 p-2 rounded border border-purple-500/20 mb-1 font-sans text-[10px] md:text-xs"><b>${d.nama}</b> [Sisa: <span class="${d.stokSisa < 15 ? 'text-red-400':'text-emerald-400'}">${d.stokSisa}</span>]</div>`).join('');
+                    foundInDb = true;
+                }
                 
-                if(mPk.length > 0) ans += (ans ? "<br>" : "") + `<span class="text-[10px] md:text-[11px] block font-black mb-1.5 border-b pb-1 uppercase font-tech tracking-wider text-pink-400 border-pink-500/30"><i class="fa-solid fa-brain"></i> PAKAR DITEMUKAN</span>` + mPk.map(p => `<div class="bg-slate-950 p-2 rounded border border-pink-500/20 mb-1 font-sans text-[10px] md:text-xs"><b>${p.penyakit}</b><br><span class="text-slate-400">Terapi: ${p.obat}</span></div>`).join('');
-                
-                if(!ans) ans = `<span class="text-red-400 font-bold"><i class="fa-solid fa-triangle-exclamation"></i> Kata kunci '${term}' tidak ditemukan.</span>`;
+                if(mPk.length > 0) {
+                    ans += (ans ? "<br>" : "") + `<span class="text-[10px] md:text-[11px] block font-black mb-1.5 border-b pb-1 uppercase font-tech tracking-wider text-pink-400 border-pink-500/30"><i class="fa-solid fa-brain"></i> PAKAR DITEMUKAN</span>` + mPk.map(p => `<div class="bg-slate-950 p-2 rounded border border-pink-500/20 mb-1 font-sans text-[10px] md:text-xs"><b>${p.penyakit}</b><br><span class="text-slate-400">Terapi: ${p.obat}</span></div>`).join('');
+                    foundInDb = true;
+                }
+                if (foundInDb) ttsOutput = "Berikut adalah hasil pencarian yang ditemukan di dalam sistem medis Darussyifa.";
             }
 
-            container.innerHTML += `<div class="bg-slate-900/90 p-2.5 md:p-3 rounded-xl border border-slate-700 max-w-[95%] md:max-w-[85%] leading-relaxed text-slate-100 text-justify font-mono text-[11px] md:text-xs shadow-md">${ans}</div>`;
+            if (foundInDb) {
+                appendBotReply(ans, ttsOutput, container);
+            } 
+            else {
+                // LOGIKA WIKIPEDIA DAN GOOGLE (DI LUAR TOPIK)
+                const typingId = 'typing-' + Date.now();
+                container.innerHTML += `
+                    <div id="${typingId}" class="flex gap-2.5 mt-3 animate-fadeIn">
+                        <div class="bg-cyan-950 border border-cyan-600/50 h-7 w-7 rounded flex items-center justify-center flex-shrink-0 text-cyan-400"><i class="fa-solid fa-robot text-xs fa-spin"></i></div>
+                        <div class="bg-slate-900 border border-slate-800 p-3 rounded-r-xl rounded-bl-xl text-slate-400 text-xs w-full shadow-md leading-relaxed animate-pulse">
+                            <i class="fa-solid fa-satellite-dish mr-1"></i> Menganalisis jaringan eksternal (Wikipedia & Google)...
+                        </div>
+                    </div>
+                `;
+                container.scrollTop = container.scrollHeight;
+
+                try {
+                    const searchUrl = `https://id.wikipedia.org/w/api.php?action=query&format=json&prop=extracts&exsentences=4&exintro=1&explaintext=1&generator=search&gsrsearch=${encodeURIComponent(query)}&gsrlimit=1&origin=*`;
+                    const wikiResp = await fetch(searchUrl);
+                    const wikiData = await wikiResp.json();
+                    
+                    document.getElementById(typingId)?.remove();
+                    const encodedTopic = encodeURIComponent(query);
+                    const googleUrl = `https://www.google.com/search?q=${encodedTopic}`;
+                    const geminiUrl = `https://gemini.google.com/app?q=${encodedTopic}`;
+
+                    if (wikiData.query && wikiData.query.pages) {
+                        const pages = wikiData.query.pages;
+                        const pageId = Object.keys(pages)[0];
+                        const extract = pages[pageId].extract;
+                        const pageTitle = pages[pageId].title;
+                        const wikiUrl = `https://id.wikipedia.org/wiki/${encodeURIComponent(pageTitle.replace(/ /g, '_'))}`;
+
+                        ans = `
+                            <div class="mb-2 border-b border-cyan-500/40 pb-1.5">
+                                <strong class="text-cyan-400 font-tech tracking-wide text-[10px] md:text-xs uppercase"><i class="fa-solid fa-globe text-emerald-400 mr-1"></i> REFERENSI WIKIPEDIA (LUAR TOPIK)</strong>
+                                <h5 class="text-white font-bold font-mono text-[11px] md:text-xs mt-1 border-l-2 border-emerald-500 pl-2 text-emerald-300">${pageTitle.toUpperCase()}</h5>
+                            </div>
+                            <p class="text-slate-200 text-justify mb-3 font-sans leading-relaxed text-[11px] md:text-xs">${extract}</p>
+                            
+                            <div class="flex flex-col gap-2 mt-2 font-mono border-t border-slate-800/80 pt-2">
+                                <span class="text-slate-400 text-[9px] font-bold">Pintasan Sumber Referensi:</span>
+                                <a href="${wikiUrl}" target="_blank" class="bg-slate-950 border border-slate-700 hover:border-white text-slate-200 px-3 py-2 rounded-lg text-[10px] transition-all flex items-center gap-2"><i class="fa-brands fa-wikipedia-w text-base w-4 text-center"></i> Baca di Wikipedia</a>
+                                <a href="${googleUrl}" target="_blank" class="bg-slate-950 border border-slate-700 hover:border-blue-400 text-slate-200 px-3 py-2 rounded-lg text-[10px] transition-all flex items-center gap-2"><i class="fa-brands fa-google text-blue-400 text-base w-4 text-center"></i> Penelusuran Google</a>
+                                <a href="${geminiUrl}" target="_blank" class="bg-slate-950 border border-slate-700 hover:border-cyan-400 text-slate-200 px-3 py-2 rounded-lg text-[10px] transition-all flex items-center gap-2"><i class="fa-solid fa-sparkles text-cyan-400 text-base w-4 text-center"></i> Chat AI Google</a>
+                            </div>
+                        `;
+                        ttsOutput = `Menurut Wikipedia. ${extract}`;
+                    } else {
+                        ans = `
+                            <p class="font-sans text-[11px] md:text-xs mb-3 text-amber-400 leading-relaxed"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Topik "<strong>${query}</strong>" tidak ditemukan dalam database lokal maupun artikel Wikipedia.</p>
+                            <p class="font-sans text-[10px] mb-2 text-slate-400">Silakan gunakan pintasan penelusuran mandiri di bawah ini:</p>
+                            <div class="flex flex-col gap-2 mt-2 font-mono border-t border-slate-800/80 pt-2">
+                                <a href="https://id.wikipedia.org/wiki/Special:Search?search=${encodedTopic}" target="_blank" class="bg-slate-950 border border-slate-700 hover:border-white text-slate-200 px-3 py-2 rounded-lg text-[10px] transition-all flex items-center gap-2"><i class="fa-brands fa-wikipedia-w text-base w-4 text-center"></i> Cari di Wikipedia</a>
+                                <a href="${googleUrl}" target="_blank" class="bg-slate-950 border border-slate-700 hover:border-blue-400 text-slate-200 px-3 py-2 rounded-lg text-[10px] transition-all flex items-center gap-2"><i class="fa-brands fa-google text-blue-400 text-base w-4 text-center"></i> Penelusuran Google</a>
+                                <a href="${geminiUrl}" target="_blank" class="bg-slate-950 border border-slate-700 hover:border-cyan-400 text-slate-200 px-3 py-2 rounded-lg text-[10px] transition-all flex items-center gap-2"><i class="fa-solid fa-sparkles text-cyan-400 text-base w-4 text-center"></i> Chat AI Google</a>
+                            </div>
+                        `;
+                        ttsOutput = "Maaf, informasi tidak ditemukan. Silakan gunakan pintasan pencarian yang tersedia.";
+                    }
+                    appendBotReply(ans, ttsOutput, container);
+                } catch (e) {
+                    document.getElementById(typingId)?.remove();
+                    ans = `<p class="text-red-400 text-xs font-bold"><i class="fa-solid fa-triangle-exclamation"></i> Gagal mengambil data eksternal. Periksa koneksi internet Anda.</p>`;
+                    appendBotReply(ans, "Gagal mengambil data eksternal.", container);
+                }
+            }
+        }
+
+        function appendBotReply(htmlContent, ttsText, container) {
+            container.innerHTML += `
+                <div class="flex gap-2.5 mt-3 animate-fadeIn">
+                    <div class="bg-cyan-950 border border-cyan-600/50 h-7 w-7 rounded flex items-center justify-center flex-shrink-0 text-cyan-400"><i class="fa-solid fa-robot text-xs"></i></div>
+                    <div class="bg-slate-900 border border-slate-800 p-3 rounded-r-xl rounded-bl-xl text-slate-200 text-xs w-full shadow-md leading-relaxed">
+                        <p class="font-bold text-[10px] text-cyan-400 mb-2 border-b border-slate-700/50 pb-1">🤖 JARVIS RESPONSE:</p>
+                        ${htmlContent}
+                    </div>
+                </div>
+            `;
             container.scrollTop = container.scrollHeight;
+            if (ttsText) speakBot(ttsText);
         }
 
         function setupScreensaverWatchdog() {
